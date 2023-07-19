@@ -1,35 +1,47 @@
 <script>
 import Header from "@/components/Header.vue";
 import Menu from "@/components/SideMenu.vue";
-import HomeBase from "@/components/HomeBase.vue"
+import HomeBase from "@/components/Base/HomeBase.vue"
+import TabCard from "@/components/TabCard.vue"
+import ForceDirected from "@/components/Base/ForceDirected.vue";
 
 export default {
-  components: {Header, Menu, HomeBase}
+  components: {Header, Menu, HomeBase, TabCard, ForceDirected},
+  data() {
+    return {
+      displayCard: false
+    }
+  },
+  methods: {
+    changeCardDisplay: function () {
+      this.displayCard = !this.displayCard;
+      // <HomeBase @changeCardDisplay="changeCardDisplay"></HomeBase>
+    }
+  }
 }
 </script>
 
 <template>
   <div>
     <Layout>
-      <Header></Header>
+      <Header active-name="home" :style="{background: '#fff'}"></Header>
       <Layout :style="{height: '780px'}">
         <Sider hide-trigger :style="{background: '#fff'}">
-          <Menu active-name="main"></Menu>
+          <Menu active-name="home"></Menu>
         </Sider>
-        <HomeBase></HomeBase>
+
+        <ForceDirected width="1000" height="700" :nodes="nodes" :edges="edges"></ForceDirected>
+        <Card v-show="displayCard == true">
+          <TabCard></TabCard>
+        </Card>
       </Layout>
     </Layout>
   </div>
 </template>
 
 <style>
-.horizontal-menu {
-  height: 80px;
-  text-aligin: center;
-}
 
-.ivu-menu-item {
-  text-aligin: center;
-  position: center;
+/deep/ .ivu-layout-header {
+  background: #ffffff;
 }
 </style>

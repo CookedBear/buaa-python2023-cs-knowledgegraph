@@ -1,5 +1,5 @@
 <template>
-  <Header></Header>
+  <Header active-name="about" :style="{background: '#fff'}"></Header>
   <Layout :style="{height: '780px'}">
         <Sider hide-trigger :style="{background: '#fff'}">
           <Menu activeName="about"></Menu>
