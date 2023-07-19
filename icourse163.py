@@ -3,7 +3,8 @@ import requests
 
 def icourse163_search(keyword):
     cookies = {
-        'NTESSTUDYSI': 'd51a29034358496ca77d3f522cca3dc0'}
+        'NTESSTUDYSI': 'd51a29034358496ca77d3f522cca3dc0'
+    }
     data = {
         'mocCourseQueryVo': '{'
                             f'\"keyword\":\"{keyword}\",'
@@ -27,5 +28,6 @@ def icourse163_search(keyword):
         teacherName = data['highlightTeacherNames']
         enrollCount = data['mocCourseCard']['enrollCount']
         courseId = data['courseId']
+        imgUrl = data['mocCourseCard']['mocCourseCardDto']['imgUrl']
         courseUrl = f'https://www.icourse163.org/course/{schoolShortName}-{courseId}'
         print(className, schoolName, teacherName, enrollCount, courseUrl)
