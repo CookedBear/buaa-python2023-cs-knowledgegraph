@@ -7,6 +7,7 @@ from django.core import serializers
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from database.models import NodeInfo
+from database.models import User
 
 
 # Create your views here.
@@ -38,5 +39,27 @@ def show_nodes(request):
     except Exception as e:
         response['msg'] = str(e)
         response['error_num'] = 1
+
+    return JsonResponse(response)
+
+
+@require_http_methods(["POST"])
+def login_in(request):
+    response = {}
+    try:
+        name = request.POST['username']
+        key = request.POST["password"]
+        user = User.objects.filter(username=name).first()
+        if user.password != key:
+            response['login_error'] = 1
+            response['login_result'] = '密码错误'
+            return JsonResponse(response)
+        # user = User(username=name, password=key)
+        # user.save()
+        response['login_error'] = 0
+        response['login_result'] = ''
+    except Exception as e:   # 查人失败了
+        response['login_error'] = 2
+        response['login_result'] = '用户不存在'
 
     return JsonResponse(response)
