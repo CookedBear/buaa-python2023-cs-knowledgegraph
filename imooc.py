@@ -1,28 +1,14 @@
-# coding:utf8
-import jsonpath
 import requests
-import random
-import json
-from ua_info import ua_list
 
 
-# 获取随机headers
-def get_headers():
-    headers = {'User-Agent': random.choice(ua_list)}
-    return headers
-
-
-def get_parse(result):
-    ans = jsonpath.jsonpath(result, '$.data.hits')
-    for dic in ans[0]:
-        print(dic["_source"]["title"], dic["_source"]["numbers"], dic["_source"]["target_url"])
-    return ans
-
-
-def imooc_search(string):
-    url = 'https://www.imooc.com/search/course?words={}&source=&easy_type=&skill=&page=1'.format(string)
-    headers = get_headers()
-    html = requests.get(url=url, headers=headers).json()
-    html = get_parse(html)
-    # with open('result.json', 'w', encoding='gb18030') as file:
-    #     json.dump(html, file)
+def imooc_search(keyword):
+    url = f'https://www.imooc.com/search/course?words={keyword}&source=&easy_type=&skill=&page=1'
+    html = requests.get(url).json()
+    content_list = html['data']['hits']
+    for data in content_list:
+        courseName = data['_source']['title']
+        difficulty = data['_source']['easy_type_name']
+        numbers = data['_source']['numbers'] if 'numbers' in data['_source'] else data['_source']['collects']
+        imgUrl = 'https:' + data['_source']['pic']
+        courseUrl = data['_source']['target_url']
+        print(courseName, difficulty, numbers, courseUrl)

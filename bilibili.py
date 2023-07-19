@@ -5,9 +5,9 @@ cookies = {
 }
 
 
-def bilibili_search(string):
+def bilibili_search(keyword):
     params = {
-        'keyword': string
+        'keyword': keyword
     }
     url = 'https://api.bilibili.com/x/web-interface/search/all/v2'
     response = requests.get(url, params=params, cookies=cookies)
@@ -21,7 +21,3 @@ def bilibili_search(string):
         imgUrl = 'http:' + data['pic']
         courseUrl = data['arcurl']
         print(courseName, play, duration, author, courseUrl)
-    # print(response)
-    # with open('result.json', 'w', encoding='gb18030') as file:
-    #     json.dump(response, file)
-    # print()
