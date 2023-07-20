@@ -31,7 +31,7 @@ export default {
         </Sider>
 
         <ForceDirected width="1000" height="700" :nodes="nodes" :edges="edges"></ForceDirected>
-        <Card v-show="displayCard == true">
+        <Card v-show="displayCard === true">
           <TabCard></TabCard>
         </Card>
       </Layout>

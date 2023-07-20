@@ -12,7 +12,7 @@
     </FormItem>
     <FormItem>
       <Button type="primary" @click="submitNode">Submit</Button>
-      <Button style="margin-left: 8px">Cancel</Button>
+      <Button style="margin-left: 8px" @click="hide">Cancel</Button>
     </FormItem>
   </Form>
   </Card>
@@ -21,6 +21,7 @@
 import API from "@/plugins/axios.js"
 
 export default {
+  emit: ['hideCard'],
   data() {
     return {
       formItem: {
@@ -32,6 +33,7 @@ export default {
   methods: {
     submitNode: function () {
       console.log(this.formItem)
+      if (this.formItem.input === '') { return }
 
       var params = new URLSearchParams();
       params.append('knowledgeName', this.formItem.input)
@@ -43,7 +45,11 @@ export default {
       }).then((res) => {
         console.log(res)
       })
-
+    },
+    hide: function() {
+      this.formItem.relation = null
+      this.formItem.input = ''
+      this.$emit("hideCard")
     }
   }
 }

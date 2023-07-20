@@ -3,7 +3,7 @@
   <button @click="getNode" style="height: 50px">Trial</button>
   <button @click="this.display = !this.display" style="height: 50px">Show/Hide</button>
   <Layout>{{ datas.list }}</Layout>
-  <AddNode v-show="display" style="position: absolute; right: 4%; bottom: 18%; z-index: 9"></AddNode>
+  <AddNode v-show="display" style="position: absolute; right: 4%; bottom: 18%; z-index: 9" @hideCard="display=!display"></AddNode>
 
 </template>
 
