@@ -1,5 +1,8 @@
 <template>
-  <Form :model="formItem" :label-width="80">
+
+   <Card style="height: 250px; width: 300px; background: rgb(239,255,246); ">
+    <br>
+    <Form :model="formItem" :label-width="80">
     <FormItem label="Input">
       <Input v-model="formItem.input" placeholder="Enter Node name."></Input>
     </FormItem>
@@ -12,6 +15,7 @@
       <Button style="margin-left: 8px">Cancel</Button>
     </FormItem>
   </Form>
+  </Card>
 </template>
 <script>
 import API from "@/plugins/axios.js"

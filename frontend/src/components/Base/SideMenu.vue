@@ -5,7 +5,7 @@
         <Icon type="ios-navigate"></Icon>
         主页
       </template>
-      <MenuItem name="home" to="/">Main</MenuItem>
+      <MenuItem name="home" to="/home">Main</MenuItem>
       <MenuItem name="1-2">Option 2</MenuItem>
       <MenuItem name="1-3">Option 3</MenuItem>
     </Submenu>

@@ -1,7 +1,7 @@
 <script>
-import Header from "@/components/Header.vue";
-import Menu from "@/components/SideMenu.vue";
-import SelfBase from "@/components/Base/SelfBase.vue"
+import Header from "@/components/Base/Header.vue";
+import Menu from "@/components/Base/SideMenu.vue";
+import SelfBase from "@/components/SelfBase.vue"
 
 export default {
   components: {Header, Menu, SelfBase}

@@ -14,7 +14,7 @@ export default {
   <Header class="horizontal-menu">
     <Menu mode="horizontal" theme="light" :active-name="activeName" class="horizontal-menu"
           style="{background: #ffffff}">
-      <MenuItem name="home" to="/">
+      <MenuItem name="home" to="/home">
         <Icon type="ios-analytics"></Icon>
         主页
       </MenuItem>

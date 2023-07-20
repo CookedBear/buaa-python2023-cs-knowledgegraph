@@ -20,8 +20,8 @@
 </style>
 
 <script>
-import Header from "@/components/Header.vue";
-import Menu from "@/components/SideMenu.vue"
+import Header from "@/components/Base/Header.vue";
+import Menu from "@/components/Base/SideMenu.vue"
 
 export default {
   components: {Header, Menu}

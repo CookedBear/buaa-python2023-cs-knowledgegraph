@@ -1,8 +1,8 @@
 <script>
-import Header from "@/components/Header.vue";
-import Menu from "@/components/SideMenu.vue";
-import HomeBase from "@/components/Base/HomeBase.vue"
-import TabCard from "@/components/TabCard.vue"
+import Header from "@/components/Base/Header.vue";
+import Menu from "@/components/Base/SideMenu.vue";
+import HomeBase from "@/components/HomeBase.vue"
+import TabCard from "@/components/Base/TabCard.vue"
 import ForceDirected from "@/components/Base/ForceDirected.vue";
 
 export default {
