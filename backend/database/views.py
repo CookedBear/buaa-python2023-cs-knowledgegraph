@@ -63,3 +63,26 @@ def login_in(request):
         response['login_result'] = '用户不存在'
 
     return JsonResponse(response)
+
+
+@require_http_methods(["POST"])
+def register(request):
+    response = {}
+    users = 0
+    try:
+        name = request.POST['username']
+        key = request.POST["password"]
+        users = User.objects.values('username')
+        if {'username': name} in users:
+            response['register_error'] = 1
+            response['register_result'] = '用户已存在'
+            return JsonResponse(response)
+        user = User(username=name, password=key)
+        user.save()
+        response['register_error'] = 0
+        response['register_result'] = ''
+    except Exception as e:
+        response['login_error'] = 2
+        response['login_result'] = "Other Error."
+
+    return JsonResponse(response)
