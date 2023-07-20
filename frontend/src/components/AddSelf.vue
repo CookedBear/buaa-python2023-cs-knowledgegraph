@@ -13,7 +13,7 @@
       <FormItem>
         <Button type="primary" @click="submitNode">Submit</Button>
         <Button style="margin-left: 8px" @click="hide">Cancel</Button>
-        <p style="color: red">{{error_result}}</p>
+        <p style="color: red">{{ error_result }}</p>
       </FormItem>
     </Form>
   </Card>
@@ -39,11 +39,9 @@ export default {
       error_result: ''
     }
   },
-  props: {'selected': String},
   methods: {
     submitNode: function () {
       console.log(this.formItem)
-      console.log({'node1': this.selected, 'node2': this.formItem.input})
       if (this.formItem.input === '') {
         return
       }
@@ -57,23 +55,11 @@ export default {
         params: params
       }).then((res) => {
         console.log(res)
-        var params = new URLSearchParams();
-        params.append('source', this.formItem.input)
-        params.append('target', this.selected)
-        params.append('name', 'LINKING')
-        API({
-          url: '/add_relation/',
-          method: 'get',
-          params: params
-        }).then((res) => {
-          console.log(res)
-          if (res.data.add_error !== 0) {
-            this.error_result = res.data.add_result
-            return
-          }
-          this.$emit('rebuild')
-          this.hide()
-        })
+        if (res.data.error_num !== 0) {
+          return
+        }
+        this.$emit('rebuild')
+        this.hide()
         // console.log(this.nodeName)
 
       })
@@ -84,10 +70,5 @@ export default {
       this.$emit("hideCard")
     }
   },
-  watch: {
-    selected(val) {
-      this.nodeName = val
-    }
-  }
 }
 </script>

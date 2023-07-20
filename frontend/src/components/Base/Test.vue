@@ -1,5 +1,6 @@
 <script>
 import * as echarts from "echarts";
+import AddNode from "@/components/Base/AddNode.vue"
 
 
 export default {
@@ -7,7 +8,15 @@ export default {
     mainClick: function () {
       this.contextmenu = false
       this.$refs.rightMenu.style.display = 'none';
+    },
+    addNode: function() {
+      // 显示卡片：节点名 + 级别；自带消失
+      this.addNodeDisplay = true
+      this.$refs.rightMenu.style.display = 'none';
     }
+  },
+  components: {
+    AddNode
   },
   data() {
     return {
@@ -61,7 +70,8 @@ export default {
           level: 2
         }
       ],
-      contextmenu: false
+      contextmenu: false,
+      addNodeDisplay: false
     }
   },
   mounted() {
@@ -125,6 +135,20 @@ export default {
             },
           }
         },
+        lineStyle: { //==========关系边的公用线条样式。
+          normal: {
+            color: 'rgba(77,50,77,0.4)',
+            width: '2.1',
+            type: 'solid', //线的类型 'solid'（实线）'dashed'（虚线）'dotted'（点线）
+            curveness: 0.27, //线条的曲线程度，从0到1
+            opacity: 0.8
+            // 图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。默认0.5
+          },
+          emphasis: {//高亮状态
+            opacity: 1,
+            width: '2.8',
+          }
+        },
         draggable: true, // 节点是否可拖拽
         roam: true,  // 是否开启鼠标缩放和平移漫游
         focusNodeAdjacency: true, // 是否在鼠标移到节点上的时候突出显示节点以及节点的边和邻接节点
@@ -175,9 +199,9 @@ export default {
           }
         },
         force: { // 力引导布局相关的配置项
-          repulsion: 120, // 节点之间的斥力因子
-          gravity: 0.01, // 节点受到的向中心的引力因子 越大越往中心靠拢
-          edgeLength: 240, // 边的两个节点之间的距离
+          repulsion: 110, // 节点之间的斥力因子
+          gravity: 0.03, // 节点受到的向中心的引力因子 越大越往中心靠拢
+          edgeLength: [230, 200], // 边的两个节点之间的距离
           layoutAnimation: true, // 显示布局的迭代动画
         },
         nodes: this.graphNodes,  // 节点数据列表
@@ -208,11 +232,13 @@ export default {
   <div id="main" ref="main" style="height: 650px; width: 1300px" @contextmenu.prevent="" @click="mainClick"></div>
   <div ref="rightMenu" class="menu" style="display: none;">
     <ul>
-      <li @click="">添加关联节点</li>
-      <li>删除节点</li>
-      <li>添加关系</li>
+      <li @click="addNode">添加关联节点</li>
+      <li @click="delNode">删除节点</li>
+      <li @click="addRelation">添加关系</li>
+      <li @click="addSingle">添加孤立节点</li>
     </ul>
   </div>
+  <AddNode v-show="addNodeDisplay === true" style="position: absolute; right: 4%; bottom: 18%; z-index: 9" @hideCard="addNodeDisplay=!addNodeDisplay"></AddNode>
 </template>
 
 <style>

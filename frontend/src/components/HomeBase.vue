@@ -1,246 +1,383 @@
-<template>
-  <div id='graph' class='hoverWarp'>
-    <svg :id='id' :width='width' :height='height'></svg>
-
-    <div id='tooltip' class='hidden'>
-      <p><strong>状态参数</strong></p>
-      <p>
-        <span id='position'></span> <br/>
-        <span id='jointAngle'></span>
-      </p>
-    </div>
-  </div>
-  <div id="app">
-    <div id="graph">
-
-    </div>
-  </div>
-</template>
-
 <script>
-import * as d3 from 'd3'
+import * as echarts from "echarts";
+import AddNode from "@/components/Base/AddNode.vue"
+import API from "@/plugins/axios";
+import Qs from "qs";
+import AddSelf from "@/components/AddSelf.vue";
+
 
 export default {
-  emits: ['changeCardDisplay'],
   methods: {
-    changeCard: function () {
-      this.$emit("changeCardDisplay");
+    mainClick: function () {
+      this.contextmenu = false
+      this.$refs.rightMenu.style.display = 'none';
+      this.$refs.rightMenu1.style.display = 'none';
     },
-    init() {
-      console.log('init')
+    addNode: function () {
+      // 显示卡片：节点名 + 级别; 菜单自消失
+      this.addNodeDisplay = true
+      this.$refs.rightMenu.style.display = 'none';
+    },
+    addSingle: function () {
+      this.addSelfDisplay = true
+      this.$refs.rightMenu.style.display = 'none';
+    },
+    setChartsOn: function () {
+      const that = this;
+      console.log(this.graphNodes)
+      var myChart = echarts.getInstanceByDom(document.getElementById('main'))
+      if (myChart == null) {
+        myChart = echarts.init(document.getElementById('main'));
+      }
+      myChart.setOption({
+        tooltip: {
+          show: true,
+          formatter: "<div style='display:block;word-break: break-all;word-wrap: break-word;white-space:pre-wrap;max-width: 80px'>" + "{b} " + "</div>"
+        },
+        series: [{
+          type: 'graph', // 声明绘制关系图
+          layout: 'force', // 声明绘制关系图中的力导向图
+          symbolSize: (value, params) => {
+            switch (params.data.level) {
+              case 0:
+                return 75;
+              case 1:
+                return 60;
+              case 2:
+                return 50;
+              default:
+                return 45;
+            }
+          },
+          itemStyle: {
+            normal: {
+              shadowBlur: 4,
+              color: (params) => {
+                switch (params.data.level) {
+                  case 0:
+                    return 'purple';
+                  case 1:
+                    return 'red';
+                  case 2:
+                    return 'blue';
+                  case 3:
+                    return 'green';
+                  default:
+                    return 'black';
+                }
+              },
+            }
+          },
+          lineStyle: { //==========关系边的公用线条样式。
+            normal: {
+              color: 'rgba(77,50,77,0.4)',
+              width: '2.4',
+              type: 'solid', //线的类型 'solid'（实线）'dashed'（虚线）'dotted'（点线）
+              curveness: 0.27, //线条的曲线程度，从0到1
+              opacity: 0.8,
+              shadowBlur: 10,
+              shadowColor: 'red',
+              // 图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。默认0.5
+            },
+            emphasis: {//高亮状态
+              opacity: 1,
+              width: '3.2',
+            }
+          },
+          draggable: true, // 节点是否可拖拽
+          roam: true,  // 是否开启鼠标缩放和平移漫游
+          focusNodeAdjacency: true, // 是否在鼠标移到节点上的时候突出显示节点以及节点的边和邻接节点
+          edgeSymbol: ['', ''],
+          cursor: 'pointer',
 
-      let marge = {top: 60, bottom: 60, left: 60, right: 60}
-      let width = this.width ? this.width : 900
-      let height = this.height ? this.height : 600
-
-      // 重新加载
-      d3.selectAll('#graph svg > *').remove()
-      let svg = d3.selectAll('svg')
-
-      let g = svg
-          .append('g')
-          .attr('transform', `translate(${marge.top}, ${marge.left})`)
-
-      // 准备数据
-      // 节点集
-      let nodes = this.my_nodes
-      // 边集
-      let edges = this.my_edges
-
-      // 新建一个力导向图
-      let forceSimulation = d3
-          .forceSimulation(nodes) // 新建一个力模拟器，但是没有任何力的作用 调用force方法来生成力
-          .force('link', d3.forceLink().links(edges).distance(200)) // 连线导致的引力
-          .force('charge', d3.forceManyBody().strength(-500)) // 斥力
-          .force(
-              'center',
-              d3.forceCenter().x(width / 2).y(height / 2)
-          ) // 确定模拟图的中心
-          .on('tick', ticked) // 如何随时间变化
-
-      // 绘制边
-      let links = g
-          .append('g')
-          .selectAll('line')
-          .data(edges)
-          .enter()
-          .append('line')
-          .attr('stroke', 'gray')
-          .attr('stroke-width', 1)
-
-      // 边上的文字
-      let linksText = g
-          .append('g')
-          .selectAll('text')
-          .data(edges)
-          .enter()
-          .append('text')
-          .text((d) => `[${d.parameter}]`)
-
-      // 创建分组
-      let gs = g
-          .selectAll('.circleText')
-          .data(nodes)
-          .enter()
-          .append('g')
-          .attr('transform', (d) => `translate(${d.x}, ${d.y})`)
-          .call(
-              d3.drag().on('start', started).on('drag', dragged).on('end', ended)
-          )
-
-      // 绘制节点
-      gs.append('circle')
-          .attr('r', 25)
-          .attr('fill', '#D9C8AE')
-          .attr('stroke', '#c0a378')
-          .attr('stroke-width', 2)
-
-      // 文字
-      gs.append('text')
-          .attr('x', -10)
-          .attr('y', 5)
-          .attr('fill', 'white')
-          .text((d) => d.name)
-
-      // hover
-      gs.on('mouseover', function (event, d) {
-        let xPosition = event.pageX + 10
-        let yPosition = event.pageY + 10
-
-        console.log(xPosition, yPosition)
-
-        // 显示div标签信息
-        let tooltip = d3
-            .select('#tooltip')
-            .style('opacity', 1)
-            .style('left', xPosition + 'px')
-            .style('top', yPosition + 'px')
-
-        // 设置div标签内容
-        tooltip.select('#jointAngle').text(`关节角: ${d.jointAngle}`)
-        tooltip.select('#position').text(`位置: ${d.position}`)
-
-        d3.select('#tooltip').classed('hidden', false)
+          emphasis: { //  鼠标悬浮高亮图形的样式
+            itemStyle: {
+              borderColor: '#bd99f6',
+              borderWidth: 2,
+              borderType: 'solid',
+              symbolSize: 40,
+            },
+            label: {
+              show: true,
+              formatter: (record) => {
+                if (record.name.length > 10) {
+                  return record.name.substr(0, 5) + '...'
+                } else {
+                  return record.name
+                }
+              }
+            }
+          },
+          edgeLabel: { // 设置连线label样式
+            normal: {
+              show: true,
+              textStyle: {
+                fontSize: 14,
+                color: '#000'
+              },
+              formatter(x) {
+                return x.data.name;
+              }
+            }
+          },
+          grid: { // 让图表占满容器
+            top: "0px",
+            left: "0px",
+            right: "0px",
+            bottom: "0px"
+          },
+          label: { // 节点label设置
+            show: true,
+            position: 'inside',
+            fontSize: 15,
+            color: '#fff',
+            bold: true,
+            formatter: (record) => {
+              console.log(record)
+              return record.data.name
+              // if (record.name.length > 10) {
+              //   return record.name.substr(0, 5) + '...'
+              // } else {
+              //   return record.name
+              // }
+            }
+          },
+          force: { // 力引导布局相关的配置项
+            repulsion: 110, // 节点之间的斥力因子
+            gravity: 0.03, // 节点受到的向中心的引力因子 越大越往中心靠拢
+            edgeLength: [230, 200], // 边的两个节点之间的距离
+            layoutAnimation: true, // 显示布局的迭代动画
+          },
+          nodes: this.graphNodes,  // 节点数据列表
+          links: this.graphLinks, // 关系数据列表
+        }]
       })
-
-      // leave
-      gs.on('mouseleave', function (event, d) {
-        d3.select('#tooltip').classed('hidden', true)
+      myChart.on('click', function (param) {
+        // console.log(param)
+        var nodeName = param.data.name
+        that.selectedNodeName = nodeName
+        console.log(nodeName)
       })
-
-      // ticked 表示力导向图如何随时间变化
-      function ticked() {
-        links
-            .attr('x1', (d) => d.source.x)
-            .attr('y1', (d) => d.source.y)
-            .attr('x2', (d) => d.target.x)
-            .attr('y2', (d) => d.target.y)
-
-        linksText
-            .attr('x', (d) => (d.source.x + d.target.x) / 2)
-            .attr('y', (d) => (d.source.y + d.target.y) / 2)
-
-        gs.attr('transform', (d) => `translate(${d.x}, ${d.y})`)
-      }
-
-      // drag
-      function started(event, d) {
-        if (!event.active) {
-          // 设置衰减系数，对节点位置移动过程的模拟，数值越高移动越快，数值范围[0, 1]
-          forceSimulation.alphaTarget(0.8).restart()
+      myChart.on('contextmenu', function (params) {
+        console.log(params)
+        if (params.dataType === 'node') {
+          that.selectedNodeName = params.data.name
+          console.log(that.selectedNodeName)
+          that.contextmenu = true
+          // 去掉悬停
+          that.$refs.main.children[1].style.display = 'none'
+          that.$refs.rightMenu1.style.display = 'none';
+          that.$refs.rightMenu.style.display = 'block';
+          // // //让自定义菜单随鼠标的箭头位置移动
+          that.$refs.rightMenu.style.left = params.event.offsetX + 45 + 'px'
+          that.$refs.rightMenu.style.top = params.event.offsetY + 45 + 'px'
+        } else {
+          that.selectedSource = params.data.source
+          that.selectedTarget = params.data.target
+          that.contextmenu1 = true
+          // 去掉悬停
+          that.$refs.main.children[1].style.display = 'none'
+          that.$refs.rightMenu.style.display = 'none';
+          that.$refs.rightMenu1.style.display = 'block';
+          // // //让自定义菜单随鼠标的箭头位置移动
+          that.$refs.rightMenu1.style.left = params.event.offsetX + 120 + 'px'
+          that.$refs.rightMenu1.style.top = params.event.offsetY + 40 + 'px'
         }
-        d.fx = d.x
-        d.fy = d.y
-      }
 
-      function dragged(event, d) {
-        d.fx = event.x
-        d.fy = event.y
-      }
+      });
+      console.log("graph built.")
+    },
+    rebuildChart: function () {
+      console.log("rebuilding graph...")
+      API({
+        url: '/read_graph/',
+        method: 'get',
+      }).then((res) => {
+        console.log(res.data)
+        console.log(res.data.nodes)
 
-      function ended(event, d) {
-        if (!event.active) {
-          forceSimulation.alphaTarget(0)
+        var nodes = []
+        for (var i in res.data.nodes) {
+          nodes.push({
+            name: res.data.nodes[i].fields.knowledgeName,
+            level: res.data.nodes[i].fields.relation
+          })
         }
-        d.fx = null
-        d.fy = null
-      }
+        var links = []
+        for (var j in res.data.links) {
+          links.push({
+            source: res.data.links[j].fields.source,
+            target: res.data.links[j].fields.target,
+            name: res.data.links[j].fields.name
+          })
+        }
+        this.graphNodes = nodes
+        this.graphLinks = links
+        this.setChartsOn()
+      })
     },
-    highlightNode(node) {
-      console.log('highlightNode', node)
-      // 还原原本的颜色
-      d3.selectAll('circle').attr('fill', '#D9C8AE')
-
-      //画新颜色
-      let highlightNode = d3.selectAll('circle').filter((d) => node.nodesInPath.includes(d.name))
-      highlightNode.attr('fill', '#66ccff')
+    delNode: function () {
+      var data = {}
+      data['del_node'] = this.selectedNodeName
+      API({
+        url: '/del_node/',
+        method: 'post',
+        data: (Qs.stringify(data))
+      }).then((res) => {
+        console.log(res)
+        this.$refs.rightMenu.style.display = 'none';
+        this.rebuildChart()
+      })
     },
-
-    cleanNode() {
-      d3.selectAll('circle').attr('fill', '#D9C8AE')
+    delLine: function () {
+      var data = {}
+      data['source'] = this.selectedSource
+      data['target'] = this.selectedTarget
+      API({
+        url: '/del_line/',
+        method: 'post',
+        data: (Qs.stringify(data))
+      }).then((res) => {
+        console.log(res)
+        this.$refs.rightMenu1.style.display = 'none';
+        this.rebuildChart()
+      })
     }
   },
-  props: {
-    id: String,
-    width: String,
-    height: String,
-    nodes: Array,
-    edges: Array
+  components: {
+    AddSelf,
+    AddNode
   },
   data() {
     return {
-      my_nodes: this.nodes,
-      my_edges: this.edges
+      graphLinks: [{
+        source: '存储设备2',
+        target: '服务器',
+        name: '数据传输'
+      }, {
+        source: '存储设备1',
+        target: '服务器',
+        name: '数据传输'
+      },
+        {
+          source: '服务器',
+          target: '防火墙',
+          name: '访问'
+        },
+        {
+          source: '防火墙',
+          target: '网络设备1',
+          name: '访问'
+        },
+        {
+          source: '防火墙',
+          target: '网络设备2',
+          name: '访问'
+        }
+      ],
+      graphNodes: [{
+        name: '服务器',
+        level: 0
+      },
+        {
+          name: '存储设备1',
+          level: 1
+        },
+        {
+          name: '存储设备2',
+          level: 1
+        },
+        {
+          name: '防火墙',
+          level: 1
+        },
+        {
+          name: '网络设备1',
+          level: 2
+        },
+        {
+          name: '网络设备2',
+          level: 2
+        }
+      ],
+      contextmenu: false,
+      addNodeDisplay: false,
+      addSelfDisplay: false,
+      selectedNodeName: 'GGG',
+      selectedSource: '',
+      selectedTarget: '',
+      contextmenu1: false,
     }
   },
   mounted() {
-    this.my_nodes = this.nodes
-    this.my_edges = this.edges
-
-    //this.init()
-    console.log('重新加载啦')
+    this.setChartsOn()
   },
-  watch: {
-    // 监听节点和边的变化，每当node变化时更新组件
-    nodes() {
-      this.my_nodes = this.nodes
-      this.my_edges = this.edges
-
-      //this.init()
-    }
-  },
-
+  // watch: {
+  //   graphLinks: {
+  //     deep: true,
+  //     handler: function (newV) {
+  //       this.setChartsOn()
+  //     }
+  //   },
+  //   graphNodes: {
+  //     deep: true,
+  //     handler: function (newV) {
+  //       this.setChartsOn()
+  //     }
+  //   },
+  // }
 }
 </script>
 
+<template>
+  <div id="main" ref="main" style="height: 600px" @contextmenu.prevent="" @click="mainClick"></div>
+  <div ref="rightMenu" class="menu" style="display: none;">
+    <ul>
+      <li @click="addNode">添加关联节点</li>
+      <li @click="delNode">删除节点</li>
+      <li @click="addSingle">添加孤立节点</li>
+    </ul>
+  </div>
+  <div ref="rightMenu1" class="menu" style="display: none;">
+    <ul>
+      <li @click="delLine">删除边</li>
+    </ul>
+  </div>
+  <AddNode v-show="addNodeDisplay === true"
+           style="position: absolute; right: 4%; bottom: 18%; z-index: 9"
+           :selected=selectedNodeName
+           @hideCard="addNodeDisplay=!addNodeDisplay"
+           @rebuild="rebuildChart"></AddNode>
+  <AddSelf v-show="addSelfDisplay === true"
+           style="position: absolute; right: 4%; bottom: 18%; z-index: 9"
+           @hideCard="addSelfDisplay=!addSelfDisplay"
+           @rebuild="rebuildChart"></AddSelf>
+</template>
 
-<style scoped>
-#tooltip {
+<style>
+.menu {
   position: absolute;
-  width: 200px;
-  height: auto;
-  padding: 10px;
-  background-color: white;
-
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-
-  -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-
-  pointer-events: none;
+  background: rgba(168, 234, 222, 0.93);
+  border-radius: 5px;
+  left: -99999px;
+  top: -99999px;
 }
 
-#tooltip.hidden {
-  display: none;
-}
-
-#tooltip p {
+.menu ul {
+  list-style: none;
+  padding: 0;
   margin: 0;
-  font-family: sans-serif;
-  font-size: 16px;
-  line-height: 20px;
+}
+
+.menu ul li {
+  cursor: pointer;
+  padding: 5px 10px;
+  color: #000000;
+  border-bottom: 1px dashed #a9a9a9;
+  font-size: 14px;
+}
+
+.menu ul li:last-child {
+  border-bottom: none;
 }
 </style>

@@ -25,12 +25,12 @@ export default {
   <div>
     <Layout>
       <Header active-name="home" :style="{background: '#fff'}"></Header>
-      <Layout :style="{height: '780px'}">
+      <Layout :style="{height: '650px'}">
         <Sider hide-trigger :style="{background: '#fff'}">
           <Menu active-name="home"></Menu>
         </Sider>
 
-        <ForceDirected width="1000" height="700" :nodes="nodes" :edges="edges"></ForceDirected>
+        <HomeBase style="height: 650px"></HomeBase>
         <Card v-show="displayCard === true">
           <TabCard></TabCard>
         </Card>
