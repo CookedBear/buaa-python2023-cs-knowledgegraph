@@ -1,19 +1,18 @@
 <script>
 import {ElNotification} from 'element-plus'
-import {h} from 'vue'
-import {ButtonGroup} from "view-ui-plus";
+import CreepContent from "@/components/Base/CreepContent.vue"
 
 export default {
-  components: {ButtonGroup},
+  components: {CreepContent},
   emit: ['hideCard'],
   data() {
     return {
-      editableTabsValue: 1,
+      editableTabsValue: 'bilibili',
       editableTabs: [
         {
           title: 'Tab 1',
           name: '1',
-          content: 'Tab 1 content',
+          content: 'Tab 2 content',
         },
         {
           title: 'Tab 2',
@@ -45,17 +44,20 @@ export default {
 
 
 <template>
-  <el-card style="height: 87%; width: 26.7%;">
+  <el-card style="height: 87%; width: 25%;">
     <div class="card-header">
-      <span>Recommendation</span>
+      <span>{{knowledge}}</span>
       <el-button style="background-color: #beffde" text @click="close">Add Resource</el-button>
     </div>
     <el-tabs
         v-model="editableTabsValue"
-        type="card"
+        type="border-card"
         class="demo-tabs"
         style="margin-top: 8px"
     >
+      <el-tab-pane name="bilibili" label="bili">
+        <CreepContent></CreepContent>
+      </el-tab-pane>
       <el-tab-pane
           v-for="item in editableTabs"
           :key="item.name"
@@ -63,6 +65,7 @@ export default {
           :name="item.name"
       >
       </el-tab-pane>
+      {{editableTabsValue}}
     </el-tabs>
   </el-card>
 </template>

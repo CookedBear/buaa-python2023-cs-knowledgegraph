@@ -155,7 +155,7 @@ export default {
         that.selectedNodeName = nodeName
         that.tabCardDisplay = true
         console.log(nodeName)
-        this.loading()
+        that.$Loading.start();
       })
       myChart.on('contextmenu', function (params) {
         console.log(params)
@@ -255,56 +255,8 @@ export default {
   },
   data() {
     return {
-      graphLinks: [{
-        source: '存储设备2',
-        target: '服务器',
-        name: '数据传输'
-      }, {
-        source: '存储设备1',
-        target: '服务器',
-        name: '数据传输'
-      },
-        {
-          source: '服务器',
-          target: '防火墙',
-          name: '访问'
-        },
-        {
-          source: '防火墙',
-          target: '网络设备1',
-          name: '访问'
-        },
-        {
-          source: '防火墙',
-          target: '网络设备2',
-          name: '访问'
-        }
-      ],
-      graphNodes: [{
-        name: '服务器',
-        level: 0
-      },
-        {
-          name: '存储设备1',
-          level: 1
-        },
-        {
-          name: '存储设备2',
-          level: 1
-        },
-        {
-          name: '防火墙',
-          level: 1
-        },
-        {
-          name: '网络设备1',
-          level: 2
-        },
-        {
-          name: '网络设备2',
-          level: 2
-        }
-      ],
+      graphLinks: [],
+      graphNodes: [],
       contextmenu: false,
       addNodeDisplay: false,
       addSelfDisplay: false,
