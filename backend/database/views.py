@@ -10,6 +10,12 @@ from django.views.decorators.http import require_http_methods
 from database.models import NodeInfo
 from database.models import User
 from database.models import Link
+from database import cnmooc
+from database import icourse163
+from database import icourses
+from database import imooc
+from database import bilibili
+from database import study163
 
 
 # Create your views here.
@@ -162,3 +168,18 @@ def read_graph(request):
         'nodes': json.loads(serializers.serialize("json", NodeInfo.objects.filter(user=user))),
         'links': json.loads(serializers.serialize("json", Link.objects.filter(user=user)))}
     return JsonResponse(response)
+
+
+@require_http_methods(['GET'])
+def get_creep_content(request):
+    keyword = request.GET['knowledge']
+    response = {
+        'bilibili': bilibili.bilibili_search(keyword),
+        # 'cnmooc': cnmooc.cnmooc_search(keyword),
+        'icourse163': icourse163.icourse163_search(keyword),
+        'icourses': icourses.icourses_search(keyword),
+        'imooc': imooc.imooc_search(keyword),
+        'study163': study163.study163_search(keyword)
+    }
+    return JsonResponse(response)
+

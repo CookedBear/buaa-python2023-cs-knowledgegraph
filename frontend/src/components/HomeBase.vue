@@ -153,9 +153,29 @@ export default {
         // console.log(param)
         var nodeName = param.data.name
         that.selectedNodeName = nodeName
-        that.tabCardDisplay = true
         console.log(nodeName)
-        that.$Loading.start();
+        that.loading = true
+        that.$Loading.start()
+        var params = new URLSearchParams();
+        params.append('knowledge', that.selectedNodeName)
+        API({
+          url: '/get_creep_content/',
+          method: 'get',
+          params: params
+        }).then((res) => {
+          console.log(res.data)
+          // TODO: 向每个网站占据的 CreepContent 发放数据
+          that.bilibili = res.data.bilibili
+          that.icourse163 = res.data.icourse163
+          that.icourses = res.data.icourses
+          that.imooc = res.data.imooc
+          that.study163 = res.data.study163
+          setTimeout(() => {
+            that.$Loading.finish();
+            that.loading = false
+            that.tabCardDisplay = true
+          }, 500);
+        })
       })
       myChart.on('contextmenu', function (params) {
         console.log(params)
@@ -265,12 +285,28 @@ export default {
       selectedSource: '',
       selectedTarget: '',
       contextmenu1: false,
+      bilibili: [],
+      icourse163: [],
+      icourses: [],
+      imooc: [],
+      study163: [],
+      loading: false,
     }
   },
   mounted() {
     this.rebuildChart()
     this.setChartsOn()
   },
+  watch: {
+    tabCardDisplay: {
+      handler: function () {
+        if (this.tabCardDisplay === false) {
+          return
+        }
+
+      }
+    }
+  }
   // watch: {
   //   graphLinks: {
   //     deep: true,
@@ -317,7 +353,13 @@ export default {
   <TabCard v-show="tabCardDisplay === true"
            style="position: absolute; right: 4%; top: 8%; z-index: 8;"
            @hideCard="tabCardDisplay=!tabCardDisplay"
-           :knowledge="selectedNodeName"></TabCard>
+           :knowledge="selectedNodeName"
+           :bilibili=bilibili
+           :imooc=imooc
+           :icourse163=icourse163
+           :icourses=icourses
+           :study163=study163
+           v-loading="this.loading"></TabCard>
 </template>
 
 <style>
