@@ -4,7 +4,10 @@
     <br>
     <Form :model="formItem" :label-width="80">
       <FormItem label="Input">
-        <Input v-model="formItem.input" placeholder="Enter Node name."></Input>
+        <AutoComplete
+            v-model="formItem.input"
+            placeholder="Enter Node name."
+            :data="nodenames"></AutoComplete>
       </FormItem>
       <FormItem label="Level">
         <Input v-model="formItem.relation" type="number"
@@ -31,6 +34,7 @@ export default {
         relation: null,
       },
       nodeName: '',
+      nodenames: [],
       data: {
         source: '',
         target: '',
@@ -39,7 +43,7 @@ export default {
       error_result: ''
     }
   },
-  props: ['selected', 'username'],
+  props: ['selected', 'username', 'nodes'],
   methods: {
     submitNode: function () {
       console.log(this.formItem)
@@ -89,6 +93,14 @@ export default {
   watch: {
     selected(val) {
       this.nodeName = val
+    },
+    nodes: {
+      deep: true,
+      handler: function () {
+        for (var i in this.nodes) {
+          this.nodenames.push(this.nodes[i].name)
+        }
+      }
     }
   }
 }

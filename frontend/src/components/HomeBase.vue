@@ -11,6 +11,12 @@ export default {
     username: String
   },
   methods: {
+    loading: function () {
+      this.$Loading.start();
+    },
+    loaded: function () {
+      this.$Loading.finish();
+    },
     mainClick: function () {
       this.contextmenu = false
       this.$refs.rightMenu.style.display = 'none';
@@ -126,12 +132,12 @@ export default {
             color: '#fff',
             bold: true,
             formatter: (record) => {
-                if (record.name.length > 10) {
-                  return record.name.substr(0, 5) + '...'
-                } else {
-                  return record.name
-                }
+              if (record.name.length > 10) {
+                return record.name.substr(0, 5) + '...'
+              } else {
+                return record.name
               }
+            }
           },
           force: { // 力引导布局相关的配置项
             repulsion: 110, // 节点之间的斥力因子
@@ -147,7 +153,9 @@ export default {
         // console.log(param)
         var nodeName = param.data.name
         that.selectedNodeName = nodeName
+        that.tabCardDisplay = true
         console.log(nodeName)
+        this.loading()
       })
       myChart.on('contextmenu', function (params) {
         console.log(params)
@@ -300,7 +308,7 @@ export default {
       contextmenu: false,
       addNodeDisplay: false,
       addSelfDisplay: false,
-      tabCardDisplay: true,
+      tabCardDisplay: false,
       selectedNodeName: 'GGG',
       selectedSource: '',
       selectedTarget: '',
@@ -346,6 +354,7 @@ export default {
            style="position: absolute; right: 6%; bottom: 8%; z-index: 9"
            :selected=selectedNodeName
            :username=username
+           :nodes="graphNodes"
            @hideCard="addNodeDisplay=!addNodeDisplay"
            @rebuild="rebuildChart"></AddNode>
   <AddSelf v-show="addSelfDisplay === true"
@@ -355,7 +364,8 @@ export default {
            @rebuild="rebuildChart"></AddSelf>
   <TabCard v-show="tabCardDisplay === true"
            style="position: absolute; right: 4%; top: 8%; z-index: 8;"
-           @hideCard="tabCardDisplay=!tabCardDisplay"></TabCard>
+           @hideCard="tabCardDisplay=!tabCardDisplay"
+           :knowledge="selectedNodeName"></TabCard>
 </template>
 
 <style>

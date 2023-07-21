@@ -1,12 +1,14 @@
 <script>
 import {ElNotification} from 'element-plus'
 import {h} from 'vue'
+import {ButtonGroup} from "view-ui-plus";
 
 export default {
+  components: {ButtonGroup},
   emit: ['hideCard'],
   data() {
     return {
-      editableTabsValue: 2,
+      editableTabsValue: 1,
       editableTabs: [
         {
           title: 'Tab 1',
@@ -18,22 +20,10 @@ export default {
           name: '2',
           content: 'Tab 2 content',
         },
-        {
-          title: 'Tab 2',
-          name: '2',
-          content: 'Tab 2 content',
-        },
-        {
-          title: 'Tab 2',
-          name: '2',
-          content: 'Tab 2 content',
-        },
       ]
     }
   },
-  props: {
-    savedValue: undefined
-  },
+  props: ['knowledge'],
   methods: {
     close: function () {
       ElNotification({
@@ -42,14 +32,20 @@ export default {
         type: 'info',
       })
       this.$emit("hideCard")
-    }
+    },
+    loading: function () {
+      this.$Loading.start();
+    },
+    loaded: function () {
+      this.$Loading.finish();
+    },
   }
 }
 </script>
 
 
 <template>
-  <el-card style="height: 750px; width: 340px;">
+  <el-card style="height: 87%; width: 26.7%;">
     <div class="card-header">
       <span>Recommendation</span>
       <el-button style="background-color: #beffde" text @click="close">Add Resource</el-button>
@@ -66,7 +62,6 @@ export default {
           :label="item.title"
           :name="item.name"
       >
-        {{ item.content }}
       </el-tab-pane>
     </el-tabs>
   </el-card>
