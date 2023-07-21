@@ -4,7 +4,7 @@ import AddNode from "@/components/Base/AddNode.vue"
 import API from "@/plugins/axios";
 import Qs from "qs";
 import AddSelf from "@/components/AddSelf.vue";
-
+import TabCard from "@/components/Base/TabCard.vue";
 
 export default {
   props: {
@@ -35,7 +35,7 @@ export default {
       myChart.setOption({
         tooltip: {
           show: true,
-          formatter: "<div style='display:block;word-break: break-all;word-wrap: break-word;white-space:pre-wrap;max-width: 80px'>" + "{b} " + "</div>"
+          formatter: "<div style='display:block;word-break: break-all;word-wrap: break-word;white-space:pre-wrap;max-width: 95px'>" + "{b} " + "</div>"
         },
         series: [{
           type: 'graph', // 声明绘制关系图
@@ -92,7 +92,6 @@ export default {
           focusNodeAdjacency: true, // 是否在鼠标移到节点上的时候突出显示节点以及节点的边和邻接节点
           edgeSymbol: ['', ''],
           cursor: 'pointer',
-
           emphasis: { //  鼠标悬浮高亮图形的样式
             itemStyle: {
               borderColor: '#bd99f6',
@@ -100,16 +99,7 @@ export default {
               borderType: 'solid',
               symbolSize: 40,
             },
-            label: {
-              show: true,
-              formatter: (record) => {
-                if (record.name.length > 10) {
-                  return record.name.substr(0, 5) + '...'
-                } else {
-                  return record.name
-                }
-              }
-            }
+
           },
           edgeLabel: { // 设置连线label样式
             normal: {
@@ -136,14 +126,12 @@ export default {
             color: '#fff',
             bold: true,
             formatter: (record) => {
-              console.log(record)
-              return record.data.name
-              // if (record.name.length > 10) {
-              //   return record.name.substr(0, 5) + '...'
-              // } else {
-              //   return record.name
-              // }
-            }
+                if (record.name.length > 10) {
+                  return record.name.substr(0, 5) + '...'
+                } else {
+                  return record.name
+                }
+              }
           },
           force: { // 力引导布局相关的配置项
             repulsion: 110, // 节点之间的斥力因子
@@ -255,6 +243,7 @@ export default {
   components: {
     AddSelf,
     AddNode,
+    TabCard,
   },
   data() {
     return {
@@ -311,7 +300,7 @@ export default {
       contextmenu: false,
       addNodeDisplay: false,
       addSelfDisplay: false,
-      tabCardDisplay: false,
+      tabCardDisplay: true,
       selectedNodeName: 'GGG',
       selectedSource: '',
       selectedTarget: '',
@@ -354,7 +343,7 @@ export default {
     </ul>
   </div>
   <AddNode v-show="addNodeDisplay === true"
-           style="position: absolute; right: 4%; bottom: 18%; z-index: 9"
+           style="position: absolute; right: 6%; bottom: 8%; z-index: 9"
            :selected=selectedNodeName
            :username=username
            @hideCard="addNodeDisplay=!addNodeDisplay"
@@ -364,6 +353,9 @@ export default {
            :username=username
            @hideCard="addSelfDisplay=!addSelfDisplay"
            @rebuild="rebuildChart"></AddSelf>
+  <TabCard v-show="tabCardDisplay === true"
+           style="position: absolute; right: 4%; top: 8%; z-index: 8;"
+           @hideCard="tabCardDisplay=!tabCardDisplay"></TabCard>
 </template>
 
 <style>
