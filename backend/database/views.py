@@ -18,12 +18,13 @@ from database.models import Link
 def add_node(request):
     response = {}
     try:
-        nodes = NodeInfo.objects.filter(knowledgeName=request.GET.get('knowledgeName'))
+        nodes = NodeInfo.objects.filter(knowledgeName=request.GET.get('knowledgeName'), user=request.GET.get('username'))
         if nodes:
             response['msg'] = '节点已存在'
             response['error_num'] = 1
             return JsonResponse(response)
-        node = NodeInfo(knowledgeName=request.GET.get('knowledgeName'), relation=request.GET.get('relation'))
+        node = NodeInfo(knowledgeName=request.GET.get('knowledgeName'), relation=request.GET.get('relation'),
+                        user=request.GET.get('username'))
         node.save()
         response['msg'] = 'add node success'
         response['error_num'] = 0
@@ -39,7 +40,8 @@ def del_node(request):
     response = {}
     try:
         node = request.POST['del_node']
-        NodeInfo.objects.filter(knowledgeName=node).delete()
+        user = request.POST['username']
+        NodeInfo.objects.filter(knowledgeName=node, user=user).delete()
         Link.objects.filter(source=node).delete()
         Link.objects.filter(target=node).delete()
         response['msg'] = ''
@@ -54,8 +56,10 @@ def del_node(request):
 def del_line(request):
     response = {}
     try:
-        Link.objects.filter(source=request.POST['source'], target=request.POST['target']).delete()
-        Link.objects.filter(source=request.POST['target'], target=request.POST['source']).delete()
+        Link.objects.filter(source=request.POST['source'], target=request.POST['target'],
+                            user=request.POST['username']).delete()
+        Link.objects.filter(source=request.POST['target'], target=request.POST['source'],
+                            user=request.POST['username']).delete()
         response['msg'] = ''
         response['error_num'] = 0
     except Exception as e:
@@ -116,6 +120,8 @@ def register(request):
             return JsonResponse(response)
         user = User(username=name, password=key)
         user.save()
+        baseNode = NodeInfo(knowledgeName="Root", relation=0, user=name)
+        baseNode.save()
         response['register_error'] = 0
         response['register_result'] = 'register success'
     except Exception as e:
@@ -131,14 +137,15 @@ def add_relation(request):
     try:
         node1 = request.GET['source']
         node2 = request.GET['target']
+        user = request.GET['username']
         node1, node2 = [min(node1, node2), max(node1, node2)]
-        links = Link.objects.filter(source=node1, target=node2)
+        links = Link.objects.filter(source=node1, target=node2, user=user)
         if links:
             response['add_error'] = 1
             response['add_result'] = '关系已存在'
             return JsonResponse(response)
 
-        link = Link(source=node1, target=node2, name=request.GET['name'])
+        link = Link(source=node1, target=node2, name=request.GET['name'], user=user)
         link.save()
         response['add_error'] = 0
         response['add_result'] = 'add relation success'
@@ -150,7 +157,8 @@ def add_relation(request):
 
 @require_http_methods(['GET'])
 def read_graph(request):
+    user = request.GET['username']
     response = {
-        'nodes': json.loads(serializers.serialize("json", NodeInfo.objects.all())),
-        'links': json.loads(serializers.serialize("json", Link.objects.all()))}
+        'nodes': json.loads(serializers.serialize("json", NodeInfo.objects.filter(user=user))),
+        'links': json.loads(serializers.serialize("json", Link.objects.filter(user=user)))}
     return JsonResponse(response)

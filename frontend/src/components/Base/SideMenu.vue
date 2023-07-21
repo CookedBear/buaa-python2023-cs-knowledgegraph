@@ -5,15 +5,15 @@
         <Icon type="ios-navigate"></Icon>
         主页
       </template>
-      <MenuItem name="home" to="/home">Main</MenuItem>
+      <MenuItem name="home" @click="toHome">Main</MenuItem>
       <MenuItem name="1-2">Option 2</MenuItem>
       <MenuItem name="1-3">Option 3</MenuItem>
     </Submenu>
-    <MenuItem name="self" to="/self">
+    <MenuItem name="self" @click="toSelf">
       <Icon type="ios-analytics"></Icon>
       个人中心
     </MenuItem>
-    <MenuItem name="about" to="/about">
+    <MenuItem name="about" @click="toAbout">
       <Icon type="ios-analytics"></Icon>
       关于
     </MenuItem>
@@ -25,9 +25,7 @@ export default {
   data() {
     return {}
   },
-  props: {
-    activeName: 'activeName'
-  },
+  props: ['activeName', 'username'],
   computed: {
     activeNameAt: {
       immediate: true,
@@ -38,6 +36,19 @@ export default {
           return [""];
         }
       }
+    }
+  },
+  methods: {
+    toHome() {
+      console.log(this.username)
+      this.$router.push({name: 'home', query: {username: this.username}})
+    },
+    toSelf() {
+      console.log(this.username)
+      this.$router.push({name: 'self', query: {username: this.username}})
+    },
+    toAbout() {
+      this.$router.push({name: 'about', query: {username: this.username}})
     }
   }
 }

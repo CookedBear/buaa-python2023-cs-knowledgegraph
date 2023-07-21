@@ -1,11 +1,22 @@
 <script>
 export default {
   data() {
-    return {
-
-    }
+    return {}
   },
-  props: ['activeName']
+  props: ['activeName', 'username'],
+  methods: {
+    toHome() {
+      console.log(this.username)
+      this.$router.push({name: 'home', query: {username: this.username}})
+    },
+    toSelf() {
+      console.log(this.username)
+      this.$router.push({name: 'self', query: {username: this.username}})
+    },
+    toAbout() {
+      this.$router.push({name: 'about', query: {username: this.username}})
+    }
+  }
 }
 </script>
 
@@ -14,15 +25,15 @@ export default {
   <Header class="horizontal-menu">
     <Menu mode="horizontal" theme="light" :active-name="activeName" class="horizontal-menu"
           style="{background: #ffffff}">
-      <MenuItem name="home" to="/home">
+      <MenuItem name="home" @click="toHome">
         <Icon type="ios-analytics"></Icon>
         主页
       </MenuItem>
-      <MenuItem name="self" to="/self">
+      <MenuItem name="self" @click="toSelf">
         <Icon type="ios-navigate"></Icon>
         个人中心
       </MenuItem>
-      <MenuItem name="about" to="/about">
+      <MenuItem name="about" @click="toAbout">
         <Icon type="ios-navigate"></Icon>
         关于
       </MenuItem>

@@ -24,7 +24,9 @@ export default {
   },
   methods: {
     handleSubmit: function (valid, {username, password}) {
-      if (username == '') { return }
+      if (username == '') {
+        return
+      }
       this.login_data.username = username
       this.login_data.password = password
       console.log(Qs.stringify(this.login_data))
@@ -36,7 +38,14 @@ export default {
         console.log(res.data);
         this.login_result = res.data.login_result
         if (res.data.login_error == 0) {
-          this.$router.push({name: 'home'});
+          this.$router.push(
+              {
+                name: 'home',
+                query: {
+                  username: username
+                }
+              }
+          );
         }
       })
     },
@@ -45,7 +54,9 @@ export default {
       this.login_result = '找不回了，别想了。'
     },
     handleRegister: function (valid, {username, password}) {
-      if (username == '') { return }
+      if (username == '') {
+        return
+      }
       this.register_data.username = username
       this.register_data.password = password
       console.log(Qs.stringify(this.register_data))
@@ -71,7 +82,7 @@ export default {
   <h2 style="text-align: center; margin-top: 30px">This is content in LoginCard.</h2>
   <Card style="width:45%; height: 50%" class="center margin">
     <Tabs v-model="switcher" class="center card">
-      <TabPane label="login" name="login" >
+      <TabPane label="login" name="login">
         <Login @on-submit="handleSubmit">
           <UserName name="username"/>
           <Password name="password"/>

@@ -24,6 +24,7 @@ import Qs from "qs";
 
 export default {
   emit: ['hideCard', 'rebuild'],
+  props: ['username'],
   data() {
     return {
       formItem: {
@@ -49,6 +50,7 @@ export default {
       var params = new URLSearchParams();
       params.append('knowledgeName', this.formItem.input)
       params.append('relation', this.formItem.relation)
+      params.append('username', this.username)
       API({
         url: '/add_node/',
         method: 'get',

@@ -7,6 +7,9 @@ import AddSelf from "@/components/AddSelf.vue";
 
 
 export default {
+  props: {
+    username: String
+  },
   methods: {
     mainClick: function () {
       this.contextmenu = false
@@ -24,7 +27,7 @@ export default {
     },
     setChartsOn: function () {
       const that = this;
-      console.log(this.graphNodes)
+      // console.log(this.graphNodes)
       var myChart = echarts.getInstanceByDom(document.getElementById('main'))
       if (myChart == null) {
         myChart = echarts.init(document.getElementById('main'));
@@ -189,9 +192,12 @@ export default {
     },
     rebuildChart: function () {
       console.log("rebuilding graph...")
+      var params = new URLSearchParams();
+      params.append('username', this.username)
       API({
         url: '/read_graph/',
         method: 'get',
+        params: params
       }).then((res) => {
         console.log(res.data)
         console.log(res.data.nodes)
@@ -219,6 +225,7 @@ export default {
     delNode: function () {
       var data = {}
       data['del_node'] = this.selectedNodeName
+      data['username'] = this.username
       API({
         url: '/del_node/',
         method: 'post',
@@ -233,6 +240,7 @@ export default {
       var data = {}
       data['source'] = this.selectedSource
       data['target'] = this.selectedTarget
+      data['username'] = this.username
       API({
         url: '/del_line/',
         method: 'post',
@@ -246,7 +254,7 @@ export default {
   },
   components: {
     AddSelf,
-    AddNode
+    AddNode,
   },
   data() {
     return {
@@ -303,6 +311,7 @@ export default {
       contextmenu: false,
       addNodeDisplay: false,
       addSelfDisplay: false,
+      tabCardDisplay: false,
       selectedNodeName: 'GGG',
       selectedSource: '',
       selectedTarget: '',
@@ -310,6 +319,7 @@ export default {
     }
   },
   mounted() {
+    this.rebuildChart()
     this.setChartsOn()
   },
   // watch: {
@@ -346,10 +356,12 @@ export default {
   <AddNode v-show="addNodeDisplay === true"
            style="position: absolute; right: 4%; bottom: 18%; z-index: 9"
            :selected=selectedNodeName
+           :username=username
            @hideCard="addNodeDisplay=!addNodeDisplay"
            @rebuild="rebuildChart"></AddNode>
   <AddSelf v-show="addSelfDisplay === true"
            style="position: absolute; right: 4%; bottom: 18%; z-index: 9"
+           :username=username
            @hideCard="addSelfDisplay=!addSelfDisplay"
            @rebuild="rebuildChart"></AddSelf>
 </template>

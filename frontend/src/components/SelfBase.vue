@@ -2,7 +2,7 @@
   <p style="padding: 15px">No Content.</p>
   <button @click="getNode" style="height: 50px">Trial</button>
   <button @click="this.display = !this.display" style="height: 50px">Show/Hide</button>
-  <Layout>{{ datas.list }}</Layout>
+  <Layout>{{ this.datas }}</Layout>
   <AddNode v-show="display" style="position: absolute; right: 4%; bottom: 18%; z-index: 9" @hideCard="display=!display"></AddNode>
 
 </template>
@@ -20,6 +20,7 @@ export default {
       display: false,
     }
   },
+  props: ['username'],
   methods: {
     getNode() {
       console.log("begin to get")
@@ -27,8 +28,8 @@ export default {
         method: 'get',
         url: '/show_nodes/',
       }).then(res => {
-        console.log(res.data);
-        this.datas = res.data;
+        console.log(this.username);
+        this.datas = this.username;
       })
 
     }

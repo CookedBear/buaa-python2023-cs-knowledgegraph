@@ -13,7 +13,7 @@
       <FormItem>
         <Button type="primary" @click="submitNode">Submit</Button>
         <Button style="margin-left: 8px" @click="hide">Cancel</Button>
-        <p style="color: red">{{error_result}}</p>
+        <p style="color: red">{{ error_result }}</p>
       </FormItem>
     </Form>
   </Card>
@@ -39,7 +39,7 @@ export default {
       error_result: ''
     }
   },
-  props: {'selected': String},
+  props: ['selected', 'username'],
   methods: {
     submitNode: function () {
       console.log(this.formItem)
@@ -51,6 +51,7 @@ export default {
       var params = new URLSearchParams();
       params.append('knowledgeName', this.formItem.input)
       params.append('relation', this.formItem.relation)
+      params.append('username', this.username)
       API({
         url: '/add_node/',
         method: 'get',
@@ -61,6 +62,7 @@ export default {
         params.append('source', this.formItem.input)
         params.append('target', this.selected)
         params.append('name', 'LINKING')
+        params.append('username', this.username)
         API({
           url: '/add_relation/',
           method: 'get',
