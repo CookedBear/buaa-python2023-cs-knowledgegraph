@@ -28,5 +28,5 @@ def icourses_search(keyword):
                 # icourses的文件没有前缀http:，需要加上
                 courseUrl = 'http:' + courseUrl
             print(courseName, courseType, schoolName, teacherName, courseUrl)
-    except RequestException as e:
+    except:
         do_exception("icourses", keyword)

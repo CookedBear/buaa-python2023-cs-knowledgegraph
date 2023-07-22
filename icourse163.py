@@ -35,5 +35,5 @@ def icourse163_search(keyword):
             imgUrl = data['mocCourseCard']['mocCourseCardDto']['imgUrl']
             courseUrl = f'https://www.icourse163.org/course/{schoolShortName}-{courseId}'
             print(className, schoolName, teacherName, enrollCount, courseUrl)
-    except RequestException as e:
+    except:
         do_exception("icourse163", keyword)

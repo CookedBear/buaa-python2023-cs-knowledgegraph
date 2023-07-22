@@ -24,6 +24,5 @@ def bilibili_search(keyword):
             imgUrl = 'http:' + data['pic']
             courseUrl = data['arcurl']
             print(courseName, play, duration, author, courseUrl)
-    except RequestException as e:
+    except:
         do_exception("bilibili", keyword)
-

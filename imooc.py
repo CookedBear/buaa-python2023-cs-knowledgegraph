@@ -16,5 +16,5 @@ def imooc_search(keyword):
             imgUrl = 'https:' + data['_source']['pic']
             courseUrl = data['_source']['target_url']
             print(courseName, difficulty, numbers, courseUrl)
-    except RequestException as e:
+    except:
         do_exception("imooc ", keyword)
