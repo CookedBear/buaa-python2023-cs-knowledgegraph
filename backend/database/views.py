@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import os
+
 from django.shortcuts import render
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.core import serializers
 from django.shortcuts import render
 from django.db.models import Q
@@ -24,7 +27,8 @@ from database import study163
 def add_node(request):
     response = {}
     try:
-        nodes = NodeInfo.objects.filter(knowledgeName=request.GET.get('knowledgeName'), user=request.GET.get('username'))
+        nodes = NodeInfo.objects.filter(knowledgeName=request.GET.get('knowledgeName'),
+                                        user=request.GET.get('username'))
         if nodes:
             response['msg'] = '节点已存在'
             response['error_num'] = 1
@@ -183,3 +187,64 @@ def get_creep_content(request):
     }
     return JsonResponse(response)
 
+
+@require_http_methods(['GET'])
+def download_graph(request):
+    user = request.GET['username']
+    file = open("upload\\" + user + '.json', 'w')
+    graph = json.dumps({
+        "nodes": json.loads(serializers.serialize("json", NodeInfo.objects.filter(user=user))),
+        "links": json.loads(serializers.serialize("json", Link.objects.filter(user=user)))})
+    graph.replace("\'", "\"")
+    print(graph)
+    file.write(graph)
+    file.close()
+    response = FileResponse(open("upload\\" + user + '.json', 'rb'))
+    response['Content-Type'] = 'application/octet-stream'
+    # name.split('.')[0] + '.docx'，
+    name = user + '_graph.json'
+    response['Content-Disposition'] = 'attachment;filename ="%s"' % (
+        name.encode('utf-8').decode('ISO-8859-1'))
+    return response
+
+
+@require_http_methods(['POST'])
+def upload_graph(request):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    name = request.POST['username']
+    if request.method == 'POST':
+        file = request.FILES.get('file', None)
+        line = (file.readline().decode('gb2312'))
+
+        dicts = json.loads(line)
+        # 设置文件上传文件夹
+        head_path = BASE_DIR + "\\upload\\json"
+        # delete nodes & links
+        Link.objects.filter(user=name).delete()
+        NodeInfo.objects.filter(user=name).delete()
+        # add new data
+        for link in dicts['links']:
+            print(link)
+            linker = Link(source=link['fields']['source'], target=link['fields']['target'], name=link['fields']['name'], user=link['fields']['user'])
+            linker.save()
+        for node in dicts['nodes']:
+            noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'], user=node['fields']['user'])
+            noder.save()
+
+        # 判断是否存在文件夹, 如果没有就创建文件路径
+        if not os.path.exists(head_path):
+            os.makedirs(head_path)
+        file_suffix = file.name.split(".")[1]  # 获取文件后缀
+        # 储存路径
+        file_path = head_path + "\\{}".format(name + "." + file_suffix)
+        file_path = file_path.replace(" ", "")
+        # 上传文件
+        with open(file_path, 'wb') as f:
+            lines = file.readlines()
+            for line in lines:
+                f.write(line)
+
+        message = {'code': 200, 'fileurl': file_path}
+        # 返回图片路径
+
+        return JsonResponse(message)

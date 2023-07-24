@@ -10,5 +10,7 @@ urlpatterns = [
     url(r'^read_graph/', views.read_graph),
     url(r'^del_node/', views.del_node),
     url(r'^del_line/', views.del_line),
-    url(r'^get_creep_content/', views.get_creep_content)
+    url(r'^get_creep_content/', views.get_creep_content),
+    url(r'^download_graph/', views.download_graph),
+    url(r'^upload_graph/', views.upload_graph),
 ]

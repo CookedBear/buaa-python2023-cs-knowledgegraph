@@ -3,7 +3,7 @@ import * as echarts from "echarts";
 import AddNode from "@/components/Base/AddNode.vue"
 import API from "@/plugins/axios";
 import Qs from "qs";
-import AddSelf from "@/components/AddSelf.vue";
+import AddSelf from "@/components/Base/AddSelf.vue";
 import TabCard from "@/components/Base/TabCard.vue";
 
 export default {
