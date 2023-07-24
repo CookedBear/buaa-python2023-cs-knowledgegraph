@@ -32,7 +32,7 @@ def bilibili_search(keyword):
                              'img': imgUrl,
                              'url': courseUrl})
     except RequestException as e:
-        do_exception("bilibili", keyword)
+        exception.do_exception("bilibili", keyword)
 
     return bilibili
 

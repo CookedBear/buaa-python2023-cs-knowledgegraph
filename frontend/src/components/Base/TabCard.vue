@@ -7,9 +7,10 @@ import Imooc from "@/components/Base/Imooc.vue";
 import Icourse163 from "@/components/Base/Icourse163.vue";
 import Icourses from "@/components/Base/Icourses.vue";
 import Study163 from "@/components/Base/Study163.vue";
+import Cnmooc from "@/components/Base/Cnmooc.vue";
 
 export default {
-  components: {Icourse163, Icourses, Imooc, Bili, Study163},
+  components: {Icourse163, Icourses, Imooc, Bili, Study163, Cnmooc},
   emit: ['hideCard'],
   data() {
     return {
@@ -29,7 +30,7 @@ export default {
       displayData: {}
     }
   },
-  props: ['knowledge', 'bilibili', 'imooc', 'icourse163', 'icourses', 'study163'],
+  props: ['knowledge', 'bilibili', 'imooc', 'icourse163', 'icourses', 'study163', 'cnmooc'],
   methods: {
     close: function () {
       ElNotification({
@@ -68,6 +69,10 @@ export default {
       <el-tab-pane name="bilibili" label="Bilibili">
         <Bili
         :data="this.bilibili"></Bili>
+      </el-tab-pane>
+      <el-tab-pane name="cnmooc" label="cnmooc">
+        <Cnmooc
+        :data="this.cnmooc"></Cnmooc>
       </el-tab-pane>
       <el-tab-pane name="iMooc" label="iMooc">
         <Imooc

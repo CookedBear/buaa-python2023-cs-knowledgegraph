@@ -170,6 +170,7 @@ export default {
           that.icourses = res.data.icourses
           that.imooc = res.data.imooc
           that.study163 = res.data.study163
+          that.cnmooc = res.data.cnmooc
           setTimeout(() => {
             that.$Loading.finish();
             that.loading = false
@@ -290,6 +291,7 @@ export default {
       icourses: [],
       imooc: [],
       study163: [],
+      cnmooc: [],
       loading: false,
     }
   },
@@ -359,6 +361,7 @@ export default {
            :icourse163=icourse163
            :icourses=icourses
            :study163=study163
+           :cnmooc=cnmooc
            v-loading="this.loading"></TabCard>
 </template>
 

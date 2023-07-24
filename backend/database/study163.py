@@ -1,4 +1,5 @@
 import requests
+from database import exception
 
 
 def study163_search(keyword):
@@ -29,18 +30,25 @@ def study163_search(keyword):
         if content and content["code"] == 0:
             course_list = content["result"]["list"]
             for course in enumerate(course_list):
-                print(course[1])
-                print(course[1]["productName"], course[1]["provider"],
-                      course[1]["learnerCount"], course[1]["lectorName"],
-                      course[1]["bigImgUrl"])
+                productName = course[1]["productName"]
+                productId = course[1]['productId']
+                courseId = course[1]['courseId']
+                provider = course[1]["provider"]
+                learnerCount = course[1]["learnerCount"]
+                imgUrl = course[1]["bigImgUrl"]
+                if learnerCount is None:
+                    productUrl = f'https://mooc.study.163.com/course/{courseId}#/info'
+                    print(productName, provider, productUrl)
+                else:
+                    productUrl = f'https://study.163.com/course/introduction/{productId}.htm'
+                    # print('项目课程：', productName, provider, learnerCount, productUrl)
                 study163.append({
-                    'name': course[1]["productName"],
-                    'teacherName': course[1]["lectorName"],
-                    'schoolName': course[1]["provider"],
-                    'plays': course[1]["learnerCount"],
-                    'img': course[1]["bigImgUrl"]
+                    'name': productName,
+                    'teacherName': provider,
+                    'plays': learnerCount,
+                    'img': imgUrl,
+                    'url': productUrl
                 })
     except:
-        print("出错了")
-
+        exception.do_exception("study163", keyword)
     return study163

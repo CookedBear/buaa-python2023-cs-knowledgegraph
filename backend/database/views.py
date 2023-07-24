@@ -183,7 +183,8 @@ def get_creep_content(request):
         'icourse163': icourse163.icourse163_search(keyword),
         'icourses': icourses.icourses_search(keyword),
         'imooc': imooc.imooc_search(keyword),
-        'study163': study163.study163_search(keyword)
+        'study163': study163.study163_search(keyword),
+        'cnmooc': cnmooc.cnmooc_search(keyword)
     }
     return JsonResponse(response)
 
