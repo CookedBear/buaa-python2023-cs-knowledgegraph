@@ -23,12 +23,14 @@ export default {
 </script>
 
 <template>
+  <div>
+    <Layout>
       <Header
           active-name="home"
           :style="{background: '#fff'}"
           :username=username>
       </Header>
-      <Layout :style="{height: '820px'}">
+      <Layout style="height: 820px;">
         <Sider
             hide-trigger
             :style="{background: '#fff'}">
@@ -44,6 +46,8 @@ export default {
           <TabCard></TabCard>
         </Card>
       </Layout>
+    </Layout>
+  </div>
 </template>
 
 <style>

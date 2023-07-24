@@ -84,7 +84,7 @@ export default {
               color: 'rgba(77,50,77,0.4)',
               width: '2.4',
               type: 'solid', //线的类型 'solid'（实线）'dashed'（虚线）'dotted'（点线）
-              curveness: 0.27, //线条的曲线程度，从0到1
+              curveness: 0.32, //线条的曲线程度，从0到1
               opacity: 0.8,
               shadowBlur: 10,
               shadowColor: 'red',

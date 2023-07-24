@@ -33,8 +33,9 @@ export default {
 </script>
 
 <template>
+  <el-card style="text-align: center; height: 55%; width: 40%; margin: 50px auto auto;">
   <el-upload
-      class="upload-demo"
+      style="margin: 30px"
       drag
       action="http://localhost:8000/api/upload_graph/"
       accept=".json"
@@ -50,7 +51,12 @@ export default {
     </div>
 
   </el-upload>
-  <Button type="primary" @click="downloadGraph" size="large">downloadGraph</Button>
+  <Button
+      style="margin-top: 20px"
+      type="primary"
+      @click="downloadGraph"
+      size="large">downloadGraph</Button>
+    </el-card>
 </template>
 
 <style>
