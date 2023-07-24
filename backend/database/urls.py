@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^show_nodes/', views.show_nodes),
     url(r'^login_in/', views.login_in),
     url(r'^register/', views.register),
+    url(r'^change_password/', views.change_password),
     url(r'^add_relation/', views.add_relation),
     url(r'^read_graph/', views.read_graph),
     url(r'^del_node/', views.del_node),

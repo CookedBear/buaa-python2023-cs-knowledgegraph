@@ -141,6 +141,24 @@ def register(request):
     return JsonResponse(response)
 
 
+@require_http_methods(['POST'])
+def change_password(request):
+    response = {}
+    try:
+        user = request.POST['username']
+        password = request.POST['newPassword']
+        USER = User.objects.get(username=user)
+        USER.password = password
+        USER.save()
+        response['error'] = 0
+        response['result'] = "Success"
+    except Exception as e:
+        response['error'] = 2
+        response['result'] = "Other Error."
+
+    return JsonResponse(response)
+
+
 @require_http_methods(['GET'])
 def add_relation(request):
     response = {}
@@ -226,10 +244,12 @@ def upload_graph(request):
         # add new data
         for link in dicts['links']:
             print(link)
-            linker = Link(source=link['fields']['source'], target=link['fields']['target'], name=link['fields']['name'], user=link['fields']['user'])
+            linker = Link(source=link['fields']['source'], target=link['fields']['target'], name=link['fields']['name'],
+                          user=link['fields']['user'])
             linker.save()
         for node in dicts['nodes']:
-            noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'], user=node['fields']['user'])
+            noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'],
+                             user=node['fields']['user'])
             noder.save()
 
         # 判断是否存在文件夹, 如果没有就创建文件路径

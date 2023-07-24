@@ -49,13 +49,15 @@ export default {
           symbolSize: (value, params) => {
             switch (params.data.level) {
               case 0:
-                return 75;
+                return 95;
               case 1:
-                return 60;
+                return 75;
               case 2:
+                return 60;
+              case 3:
                 return 50;
               default:
-                return 45;
+                return 50;
             }
           },
           itemStyle: {
@@ -140,7 +142,7 @@ export default {
             }
           },
           force: { // 力引导布局相关的配置项
-            repulsion: 110, // 节点之间的斥力因子
+            repulsion: 250, // 节点之间的斥力因子
             gravity: 0.03, // 节点受到的向中心的引力因子 越大越往中心靠拢
             edgeLength: [230, 200], // 边的两个节点之间的距离
             layoutAnimation: true, // 显示布局的迭代动画

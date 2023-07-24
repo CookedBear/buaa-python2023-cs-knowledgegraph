@@ -37,7 +37,7 @@ export default {
       }).then(res => {
         console.log(res.data);
         this.login_result = res.data.login_result
-        if (res.data.login_error == 0) {
+        if (res.data.login_error === 0) {
           this.$router.push(
               {
                 name: 'home',

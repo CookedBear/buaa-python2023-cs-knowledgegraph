@@ -9,7 +9,7 @@ export default {
       this.contextmenu = false
       this.$refs.rightMenu.style.display = 'none';
     },
-    addNode: function() {
+    addNode: function () {
       // 显示卡片：节点名 + 级别；自带消失
       this.addNodeDisplay = true
       this.$refs.rightMenu.style.display = 'none';
@@ -20,54 +20,67 @@ export default {
   },
   data() {
     return {
-      graphLinks: [{
-        source: '存储设备2',
-        target: '服务器',
-        name: '数据传输'
-      }, {
-        source: '存储设备1',
-        target: '服务器',
-        name: '数据传输'
-      },
+      graphLinks: [
         {
-          source: '服务器',
-          target: '防火墙',
-          name: '访问'
+          source: 'BUAA',
+          target: 'SCSE',
+          name: ''
         },
         {
-          source: '防火墙',
-          target: '网络设备1',
-          name: '访问'
+          source: 'BUAA',
+          target: 'Python',
+          name: ''
         },
         {
-          source: '防火墙',
-          target: '网络设备2',
-          name: '访问'
-        }
+          source: 'BUAA',
+          target: '上网不涉密',
+          name: ''
+        },
+        {
+          source: 'BUAA',
+          target: '涉密不上网',
+          name: ''
+        },
+        {
+          source: 'SCSE',
+          target: 'Python',
+          name: ''
+        },
+        {
+          source: 'Python',
+          target: '上网不涉密',
+          name: ''
+        },
+        {
+          source: '上网不涉密',
+          target: '涉密不上网',
+          name: ''
+        },
+        {
+          source: '涉密不上网',
+          target: 'SCSE',
+          name: ''
+        },
       ],
       graphNodes: [{
-        name: '服务器',
+        name: 'BUAA',
         level: 0
       },
         {
-          name: '存储设备1',
+          name: 'SCSE',
           level: 1
         },
         {
-          name: '存储设备2',
+          name: '上网不涉密',
           level: 1
         },
         {
-          name: '防火墙',
+          name: '涉密不上网',
           level: 1
         },
         {
-          name: '网络设备1',
-          level: 2
-        },
-        {
-          name: '网络设备2',
-          level: 2
+          name: 'Python',
+          level: 1
         }
       ],
       contextmenu: false,
@@ -77,26 +90,6 @@ export default {
   mounted() {
     const that = this;
     var myChart = echarts.init(document.getElementById('main'));
-    var option = {
-      title: {
-        text: 'ECharts 入门示例'
-      },
-      tooltip: {},
-      legend: {
-        data: ['销量']
-      },
-      xAxis: {
-        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-      },
-      yAxis: {},
-      series: [
-        {
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }
-      ]
-    };
     // myChart.setOption(option);
     myChart.setOption({
 
@@ -199,7 +192,7 @@ export default {
           }
         },
         force: { // 力引导布局相关的配置项
-          repulsion: 110, // 节点之间的斥力因子
+          repulsion: 11000, // 节点之间的斥力因子
           gravity: 0.03, // 节点受到的向中心的引力因子 越大越往中心靠拢
           edgeLength: [230, 200], // 边的两个节点之间的距离
           layoutAnimation: true, // 显示布局的迭代动画
@@ -238,7 +231,8 @@ export default {
       <li @click="addSingle">添加孤立节点</li>
     </ul>
   </div>
-  <AddNode v-show="addNodeDisplay === true" style="position: absolute; right: 4%; bottom: 18%; z-index: 9" @hideCard="addNodeDisplay=!addNodeDisplay"></AddNode>
+  <AddNode v-show="addNodeDisplay === true" style="position: absolute; right: 4%; bottom: 18%; z-index: 9"
+           @hideCard="addNodeDisplay=!addNodeDisplay"></AddNode>
 </template>
 
 <style>

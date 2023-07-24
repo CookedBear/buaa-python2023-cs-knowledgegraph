@@ -21,19 +21,6 @@ export default {
     }
   },
   props: ['username'],
-  methods: {
-    getNode() {
-      console.log("begin to get")
-      API({
-        method: 'get',
-        url: '/show_nodes/',
-      }).then(res => {
-        console.log(this.username);
-        this.datas = this.username;
-      })
-
-    }
-  }
 }
 // https:/image.anosu.top/pixiv/direct?r18=1&keyword=azurlane
 </script>

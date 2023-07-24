@@ -1,16 +1,16 @@
 <template>
   <Header
       active-name="about"
-      :style="{background: '#fff'}"
+      style="background: #fff; z-index: 11"
       :username=username>
   </Header>
   <Layout :style="{height: '780px'}">
     <Sider
         hide-trigger
-        :style="{background: '#fff'}">
-      <Menu
-          activeName="about"
-          :username=username></Menu>
+        style="background: #fff; z-index: 10">
+    <Menu
+        activeName="about"
+        :username=username></Menu>
     </Sider>
     <div class="about">
       <h1>This is an about page</h1>

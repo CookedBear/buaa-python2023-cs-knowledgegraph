@@ -1,10 +1,10 @@
 <script>
 import Header from "@/components/Base/Header.vue";
 import Menu from "@/components/Base/SideMenu.vue";
-import SelfBase from "@/components/SelfBase.vue"
+import LoadBase from "@/components/LoadBase.vue"
 
 export default {
-  components: {Header, Menu, SelfBase},
+  components: {Header, Menu, LoadBase},
   data() {
     return {
       username: this.$route.query.username
@@ -17,7 +17,7 @@ export default {
   <div>
     <Layout>
       <Header
-          active-name="self"
+          active-name="load"
           :style="{background: '#fff'}"
           :username=username>
       </Header>
@@ -26,10 +26,10 @@ export default {
             hide-trigger
             :style="{background: '#fff'}">
           <Menu
-              active-name="self"
+              active-name="load"
               :username=username></Menu>
         </Sider>
-        <SelfBase :username=username></SelfBase>
+        <LoadBase style="" :username="username"></LoadBase>
       </Layout>
     </Layout>
   </div>
