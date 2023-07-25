@@ -3,22 +3,15 @@ import Header from "@/components/Base/Header.vue";
 import Menu from "@/components/Base/SideMenu.vue";
 import HomeBase from "@/components/HomeBase.vue"
 import TabCard from "@/components/Base/TabCard.vue"
-import ForceDirected from "@/components/Base/ForceDirected.vue";
 
 export default {
-  components: {Header, Menu, HomeBase, TabCard, ForceDirected},
+  components: {Header, Menu, HomeBase, TabCard},
   data() {
     return {
       displayCard: false,
       username: this.$route.query.username
     }
   },
-  methods: {
-    changeCardDisplay: function () {
-      this.displayCard = !this.displayCard;
-      // <HomeBase @changeCardDisplay="changeCardDisplay"></HomeBase>
-    }
-  }
 }
 </script>
 

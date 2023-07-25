@@ -19,12 +19,20 @@ export default {
       },
       register_result: ' ',
       register_error: false,
-      visible: 'visible'
+      visible: 'visible',
+      passwordRule: [
+        {
+          required: true, message: '密码不能为空！', trigger: 'change'
+        },
+        {
+          min: 6, message: '密码不能少于6位！', trigger: 'change'
+        }
+      ],
     }
   },
   methods: {
     handleSubmit: function (valid, {username, password}) {
-      if (username == '') {
+      if (username === '') {
         return
       }
       this.login_data.username = username
@@ -38,14 +46,7 @@ export default {
         console.log(res.data);
         this.login_result = res.data.login_result
         if (res.data.login_error === 0) {
-          this.$router.push(
-              {
-                name: 'home',
-                query: {
-                  username: username
-                }
-              }
-          );
+          this.$router.push({name: 'home', query: {username: username}});
         }
       })
     },
@@ -54,7 +55,7 @@ export default {
       this.login_result = '找不回了，别想了。'
     },
     handleRegister: function (valid, {username, password}) {
-      if (username == '') {
+      if (username === '') {
         return
       }
       this.register_data.username = username
@@ -67,7 +68,7 @@ export default {
       }).then(res => {
         console.log(res.data);
         this.register_result = res.data.register_result
-        if (res.data.register_error == 0) {
+        if (res.data.register_error === 0) {
           this.switcher = 'login'
           this.login_data.username = this.register_data.username
           this.login_data.password = this.register_data.password
@@ -79,31 +80,35 @@ export default {
 </script>
 
 <template>
-  <h2 style="text-align: center; margin-top: 30px">This is content in LoginCard.</h2>
-  <Card style="width:45%; height: 50%" class="center margin">
-    <Tabs v-model="switcher" class="center card">
-      <TabPane label="login" name="login">
-        <Login @on-submit="handleSubmit">
-          <UserName name="username"/>
-          <Password name="password"/>
-          <div class="demo-auto-login">
-            <Checkbox v-model="autoLogin" size="large">自动登录</Checkbox>
-            <a @click="jumpToLost">找回密码</a>
-          </div>
-          <Submit style="margin-top: 15px"/>
-          <p style="margin-top: 8px; color: red; text-align: left">{{ login_result }}</p>
-        </Login>
-      </TabPane>
-      <TabPane label="register" name="register">
-        <Login @on-submit="handleRegister">
-          <UserName name="username"/>
-          <Password name="password"/>
-          <div class="demo-auto-login"></div>
-          <Submit style="margin-top: 15px">注册</Submit>
-          <p style="margin-top: 8px; color: red; text-align: left">{{ register_result }}</p>
-        </Login>
-      </TabPane>
-    </Tabs>
+  <Card style="width:60%; height: 80%" class="center margin">
+    <div style="display: flex">
+      <Tabs v-model="switcher" class="card">
+        <TabPane label="login" name="login">
+          <Login @on-submit="handleSubmit">
+            <UserName name="username"/>
+            <Password name="password"/>
+            <div class="demo-auto-login">
+              <Checkbox v-model="autoLogin" size="large">自动登录</Checkbox>
+              <a @click="jumpToLost">找回密码</a>
+            </div>
+            <Submit style="margin-top: 15px"/>
+            <p style="margin-top: 8px; color: red; text-align: left">{{ login_result }}</p>
+          </Login>
+        </TabPane>
+        <TabPane label="register" name="register">
+          <Login @on-submit="handleRegister">
+            <UserName name="username"/>
+            <Password name="password"
+                      placeholder="至少6位密码，区分大小写"
+                      :rules="passwordRule"/>
+            <div class="demo-auto-login"></div>
+            <Submit style="margin-top: 15px">注册</Submit>
+            <p style="margin-top: 8px; color: red; text-align: left">{{ register_result }}</p>
+          </Login>
+        </TabPane>
+      </Tabs>
+      <img src="../../assets/fenhai.jpg" style="width: 65%; height: 60%">
+    </div>
   </Card>
 </template>
 
@@ -119,7 +124,9 @@ export default {
 
 .card {
   height: 340px;
-  width: 50%;
+  width: 30%;
+  margin-left: 3%;
+  top: 50%;
 }
 
 .ivu-tabs-nav-wrap {
