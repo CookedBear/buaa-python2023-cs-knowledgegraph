@@ -38,6 +38,7 @@ export default {
       if (myChart == null) {
         myChart = echarts.init(document.getElementById('main'));
       }
+      myChart.off('click')
       myChart.setOption({
         tooltip: {
           show: true,
@@ -153,32 +154,50 @@ export default {
       })
       myChart.on('click', function (param) {
         // console.log(param)
+        that.loading = true
+        that.$Loading.start()
         var nodeName = param.data.name
         that.selectedNodeName = nodeName
         console.log(nodeName)
-        that.loading = true
-        that.$Loading.start()
-        var params = new URLSearchParams();
-        params.append('knowledge', that.selectedNodeName)
-        API({
-          url: '/get_creep_content/',
-          method: 'get',
-          params: params
-        }).then((res) => {
-          console.log(res.data)
-          // TODO: 向每个网站占据的 CreepContent 发放数据
-          that.bilibili = res.data.bilibili
-          that.icourse163 = res.data.icourse163
-          that.icourses = res.data.icourses
-          that.imooc = res.data.imooc
-          that.study163 = res.data.study163
-          that.cnmooc = res.data.cnmooc
+
+        if (that.creepdata[nodeName] === undefined) {
+          var params = new URLSearchParams();
+          params.append('knowledge', that.selectedNodeName)
+          console.log("creep")
+          API({
+            url: '/get_creep_content/',
+            method: 'get',
+            params: params
+          }).then((res) => {
+            console.log(res.data)
+            // TODO: 向每个网站占据的 CreepContent 发放数据
+            that.creepdata[nodeName] = {}
+            that.bilibili = that.creepdata[nodeName]['bilibili'] = res.data.bilibili
+            that.icourse163 = that.creepdata[nodeName]['icourse163'] = res.data.icourse163
+            that.icourses = that.creepdata[nodeName]['icourses'] = res.data.icourses
+            that.imooc = that.creepdata[nodeName]['imooc'] = res.data.imooc
+            that.study163 = that.creepdata[nodeName]['study163'] = res.data.study163
+            that.cnmooc = that.creepdata[nodeName]['cnmooc'] = res.data.cnmooc
+            setTimeout(() => {
+              that.$Loading.finish();
+              that.loading = false
+              that.tabCardDisplay = true
+            }, 500);
+          })
+        } else {
+          that.bilibili = that.creepdata[nodeName]['bilibili']
+          that.icourse163 = that.creepdata[nodeName]['icourse163']
+          that.icourses = that.creepdata[nodeName]['icourses']
+          that.imooc = that.creepdata[nodeName]['imooc']
+          that.study163 = that.creepdata[nodeName]['study163']
+          that.cnmooc = that.creepdata[nodeName]['cnmooc']
           setTimeout(() => {
             that.$Loading.finish();
             that.loading = false
             that.tabCardDisplay = true
           }, 500);
-        })
+        }
+        console.log(that.creepdata)
       })
       myChart.on('contextmenu', function (params) {
         console.log(params)
@@ -288,6 +307,7 @@ export default {
       selectedSource: '',
       selectedTarget: '',
       contextmenu1: false,
+      creepdata: {},
       bilibili: [],
       icourse163: [],
       icourses: [],
