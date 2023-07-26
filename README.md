@@ -1,16 +1,20 @@
-创建前后端交互示例，完成后端传输部分和数据库应用（使用原装 sqlite3），手动注册 api 进行传输。前端未完成。
+# 依赖安装
 
-需要确保电脑有 django（`pip install django`）和 vue（cd frontend + npm install）
-
-运行时可以开两个 cmd：
-
-- backend：`python manage.py runserver`
-- frontend：`npm run dev`
-
-现支持 api：
-
+```bash
+$ pip install -r requirements
+$ cd frontend
+$ npm install
 ```
-http://127.0.0.1:8000/api/add_node/       ---POST
-http://127.0.0.1:8000/api/show_nodes/     ---GET
+
+<br>
+
+# 本地运行
+
+```bash
+$ start cmd /K "cd frontend && npm run dev" && python backend\manage.py runserver
 ```
+
+<br>
+
+直接在弹出的 cmd 里按 o 键，或者根据显示的链接打开前端页面
 
