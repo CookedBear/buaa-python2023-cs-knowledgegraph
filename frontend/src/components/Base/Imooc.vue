@@ -1,6 +1,11 @@
 <template>
+  <el-row style="display: flex; width: 100%; margin-bottom: 9px">
+    <el-button type="primary">播放量</el-button>
+    <el-button type="primary">排序2</el-button>
+    <el-button type="primary">排序3</el-button>
+  </el-row>
   <div class="infinite-list-wrapper" style="overflow: auto">
-    <el-scrollbar height="90%">
+    <el-scrollbar height="85%">
       <ul
           v-infinite-scroll="load"
           class="list"
@@ -47,7 +52,7 @@
           </div>
         </el-card>
       </ul>
-      <p style="text-align: center; margin-top: 3px">Loading...L不出来</p>
+      <p style="text-align: center; margin-top: 3px; margin-bottom: 18px">{{ bottomMessage }}</p>
     </el-scrollbar>
   </div>
 
@@ -65,6 +70,13 @@ export default {
   computed: {
     disabled: function () {
       return this.loading
+    },
+    bottomMessage: function () {
+      if (this.data === undefined || this.data == null || this.data.length <= 0) {
+        return 'Loading...L不出来'
+      } else {
+        return '非常好，但是已经到底了'
+      }
     }
   },
   methods: {
