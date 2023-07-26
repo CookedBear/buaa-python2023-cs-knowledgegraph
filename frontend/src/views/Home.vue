@@ -3,9 +3,10 @@ import Header from "@/components/Base/Header.vue";
 import Menu from "@/components/Base/SideMenu.vue";
 import HomeBase from "@/components/HomeBase.vue"
 import TabCard from "@/components/Base/TabCard.vue"
+import {Layout} from "view-ui-plus";
 
 export default {
-  components: {Header, Menu, HomeBase, TabCard},
+  components: {Layout, Header, Menu, HomeBase, TabCard},
   data() {
     return {
       displayCard: false,
@@ -17,27 +18,29 @@ export default {
 
 <template>
   <div>
-    <Header
-        active-name="home"
-        :style="{background: '#fff'}"
-        :username=username>
-    </Header>
-    <Layout style="">
-      <Sider
-          hide-trigger
-          :style="{background: '#fff'}">
-        <Menu
-            active-name="home"
-            :username=username>
-        </Menu>
-      </Sider>
-      <HomeBase
-          style="height: 650px"
+    <Layout>
+      <Header
+          active-name="home"
+          :style="{background: '#fff'}"
           :username=username>
-      </HomeBase>
-      <Card v-show="displayCard === true">
-        <TabCard></TabCard>
-      </Card>
+      </Header>
+      <Layout style="">
+        <Sider
+            hide-trigger
+            :style="{background: '#fff'}">
+          <Menu
+              active-name="home"
+              :username=username>
+          </Menu>
+        </Sider>
+        <HomeBase
+            style="height: 650px"
+            :username=username>
+        </HomeBase>
+        <Card v-show="displayCard === true">
+          <TabCard></TabCard>
+        </Card>
+      </Layout>
     </Layout>
   </div>
 </template>
