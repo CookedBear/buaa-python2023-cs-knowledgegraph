@@ -130,7 +130,7 @@ def register(request):
             return JsonResponse(response)
         user = User(username=name, password=key)
         user.save()
-        baseNode = NodeInfo(knowledgeName="Root", relation=0, user=name)
+        baseNode = NodeInfo(knowledgeName="计算机科学与技术", relation=0, user=name)
         baseNode.save()
         response['register_error'] = 0
         response['register_result'] = 'register success'

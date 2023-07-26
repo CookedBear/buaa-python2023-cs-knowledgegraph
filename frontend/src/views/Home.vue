@@ -17,28 +17,27 @@ export default {
 
 <template>
   <div>
-    <Layout>
-      <Header
-          active-name="home"
-          :style="{background: '#fff'}"
-          :username=username>
-      </Header>
-      <Layout style="height: 820px;">
-        <Sider
-            hide-trigger
-            :style="{background: '#fff'}">
-          <Menu
-              active-name="home"
-              :username=username></Menu>
-        </Sider>
-        <HomeBase
-            style="height: 650px"
+    <Header
+        active-name="home"
+        :style="{background: '#fff'}"
+        :username=username>
+    </Header>
+    <Layout style="">
+      <Sider
+          hide-trigger
+          :style="{background: '#fff'}">
+        <Menu
+            active-name="home"
             :username=username>
-        </HomeBase>
-        <Card v-show="displayCard === true">
-          <TabCard></TabCard>
-        </Card>
-      </Layout>
+        </Menu>
+      </Sider>
+      <HomeBase
+          style="height: 650px"
+          :username=username>
+      </HomeBase>
+      <Card v-show="displayCard === true">
+        <TabCard></TabCard>
+      </Card>
     </Layout>
   </div>
 </template>
