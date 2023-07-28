@@ -1,4 +1,5 @@
 import requests
+from pypinyin import pinyin, Style
 
 cookies = {
     'buvid3': 'CDA2F1DD-2DE9-4775-93BD-38D866B37261167611infoc'
@@ -17,7 +18,7 @@ def bilibili_search(keyword):
     content_list = html['data']['result'][11]['data']
     for data in content_list:
         courseName = str(str(data['title']).replace("<em class=\"keyword\">", "")).replace("</em>", "")
-        play = data['play']
+        play = int(data['play'])
         duration = data['duration']
         author = data['author']
         imgUrl = 'http:' + data['pic']
@@ -33,8 +34,8 @@ def bilibili_search(keyword):
         })
     bilibili = {
         'default': bilibili_default,
-        'name': sorted(bilibili_default, key=lambda x: x['name'], reverse=True),
-        'play': sorted(bilibili_default, key=lambda x: x['plays'], reverse=True),
+        'name': sorted(bilibili_default, key=lambda x: [pinyin(i, style=Style.TONE3) for i in x['name']]),
+        'plays': sorted(bilibili_default, key=lambda x: x['plays'], reverse=True),
     }
     return bilibili
 
