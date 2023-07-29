@@ -9,8 +9,17 @@
         style="width: 90%; margin: 20px auto auto;"
     >
       <el-table-column prop="name" label="节点名" sortable/>
-      <el-table-column prop="level" label="节点等级" sortable/>
-      <el-table-column prop="time" label="添加收藏时间" sortable/>
+      <el-table-column prop="level" label="节点等级" width="250" sortable/>
+      <el-table-column prop="favourite" label="是否为收藏节点" width="200" sortable>
+        <template #default="scope">
+          <el-tag
+              :type="scope.row.favourite === 0 ? 'warning' : 'success'"
+              disable-transitions
+          >{{ scope.row.favourite === 0 ? "× 否" : "√ 是" }}
+          </el-tag
+          >
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="150">
         <template #header>
           <el-input v-model="search" size="small" placeholder="关键字搜索..."/>
@@ -25,7 +34,7 @@
             <Button
                 type="error"
                 @click="handleDelete(scope.$index, scope.row)"
-            >删除收藏
+            >删除节点
             </Button>
           </div>
         </template>
@@ -60,6 +69,7 @@
 import API from "@/plugins/axios.js"
 import {Button, Space} from "view-ui-plus";
 import Qs from "qs";
+import {ElNotification} from "element-plus";
 
 export default {
   components: {Space, Button},
@@ -78,10 +88,6 @@ export default {
     displayDatas: function () {
       var that = this
       return this.datas.filter(item => {
-        // 注意 ： ES6中，为字符串提供了一个新方法，
-        // 叫做  String.prototype.includes('要包含的字符串')
-        //  如果包含，则返回 true ，否则返回 false
-        //  contain
         if (item.name.includes(that.search)) {
           return item
         }
@@ -128,15 +134,20 @@ export default {
     handleDelete: function (index, row) {
       console.log(index, JSON.parse(JSON.stringify(row)).name)
       var data = {}
-      data['nodename'] = JSON.parse(JSON.stringify(row)).name
+      data['del_node'] = JSON.parse(JSON.stringify(row)).name
       data['username'] = this.username
       data['favourite'] = 0
       API({
-        url: '/change_favourite/',
+        url: '/del_node/',
         method: 'post',
         data: (Qs.stringify(data))
       }).then((res) => {
         console.log(res)
+        ElNotification({
+          title: '成功删除',
+          message: '成功删除节点：' + JSON.parse(JSON.stringify(row)).name,
+          type: 'success',
+        })
         this.getFavourite()
       })
     },
@@ -163,6 +174,11 @@ export default {
           data: (Qs.stringify(data))
         }).then((res) => {
           console.log(res)
+          ElNotification({
+            title: '成功修改',
+            message: '成功修改节点 ' + this.name + ' 的信息',
+            type: 'success',
+          })
           this.getFavourite()
         })
       })

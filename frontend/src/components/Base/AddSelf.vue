@@ -20,6 +20,7 @@
 <script>
 import API from "@/plugins/axios.js"
 import Qs from "qs";
+import {ElNotification} from "element-plus";
 
 export default {
   emit: ['hideCard', 'rebuild'],
@@ -60,6 +61,11 @@ export default {
           this.error_result = res.data.msg
           return
         }
+        ElNotification({
+          title: '成功添加节点',
+          message: '成功添加节点 ' + this.formItem.input + ' 至当前画布',
+          type: 'success',
+        })
         this.$emit('rebuild')
         this.hide()
         // console.log(this.nodeName)

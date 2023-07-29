@@ -35,11 +35,6 @@ export default {
   props: ['knowledge', 'bilibili', 'imooc', 'icourse163', 'icourses', 'study163', 'cnmooc', 'cmooc', 'xuetangx'],
   methods: {
     close: function () {
-      ElNotification({
-        title: '哈哈，太着急了吧',
-        message: '现成的都拉成这德行，还想要拓展功能？',
-        type: 'info',
-      })
       this.$emit("hideCard")
     },
     loading: function () {
@@ -60,7 +55,7 @@ export default {
   <el-card style="height: 87%; width: 25%;">
     <div class="card-header">
       <span>{{ knowledge }}</span>
-      <el-button style="background-color: #beffde" text @click="close">Add Resource</el-button>
+      <Button type="primary" text @click="close">关闭窗口</Button>
     </div>
     <el-tabs
         v-model="editableTabsValue"

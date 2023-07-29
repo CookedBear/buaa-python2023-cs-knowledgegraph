@@ -3,6 +3,7 @@
 
 import API from "@/plugins/axios";
 import Qs from "qs";
+import {ElNotification} from "element-plus";
 
 export default {
   props: ['username'],
@@ -51,6 +52,11 @@ export default {
       }).then(res => {
         console.log(res.data);
         if (res.data.error === 0) {
+          ElNotification({
+            title: '成功修改',
+            message: '成功修改密码',
+            type: 'success',
+          })
           this.$router.push(
               {
                 name: 'home',
@@ -75,7 +81,7 @@ export default {
       <Password name="repeatPassword"
                 placeholder="确认密码"
                 :rules="passwordConfirmRule"/>
-      <Submit style="margin-top: 15px"/>
+      <Submit style="margin-top: 15px">修改密码</Submit>
     </Login>
     <!--    <el-form :model="form" label-width="120px" style="margin: 20px 50px">-->
     <!--      <el-form-item label="新的密码">-->

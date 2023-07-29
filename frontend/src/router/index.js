@@ -5,6 +5,7 @@ import Change from '@/views/Change.vue'
 import Load from '@/views/Load.vue'
 import Favourite from "@/views/Favourite.vue";
 import Login from "@/views/Login.vue"
+import Graph from "@/views/Graph.vue"
 
 const routes = [
     {
@@ -31,6 +32,11 @@ const routes = [
         path: '/self/favourite',
         name: 'favourite',
         component: Favourite,
+    },
+    {
+        path: '/self/graph',
+        name: 'graph',
+        component: Graph,
     },
     {
         path: '/login',

@@ -25,6 +25,9 @@ export default {
     },
     toFavourite() {
       this.$router.push({name: 'favourite', query: {username: this.username}})
+    },
+    toGraph() {
+      this.$router.push({name: 'graph', query: {username: this.username}})
     }
   }
 }
@@ -46,7 +49,8 @@ export default {
         </template>
         <MenuItem name="change" @click="toChange">修改密码</MenuItem>
         <MenuItem name="load" @click="toLoad">导入/导出</MenuItem>
-        <MenuItem name="favourite" @click="toFavourite">我的收藏</MenuItem>
+        <MenuItem name="favourite" @click="toFavourite">全部节点</MenuItem>
+        <MenuItem name="graph" @click="toGraph">收藏的图</MenuItem>
       </Submenu>
       <MenuItem name="about" @click="toAbout">
         <Icon type="ios-navigate"></Icon>

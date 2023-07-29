@@ -29,7 +29,7 @@ export default {
             hide-trigger
             :style="{background: '#fff'}">
           <Menu
-              style="height: 650px"
+              style="height: 640px"
               active-name="home"
               :username=username>
           </Menu>

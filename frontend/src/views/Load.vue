@@ -21,7 +21,7 @@ export default {
           :style="{background: '#fff'}"
           :username=username>
       </Header>
-      <Layout style="height: 780px; z-index: auto">
+      <Layout style="height: 640px; z-index: auto">
         <Sider
             hide-trigger
             :style="{background: '#fff'}">

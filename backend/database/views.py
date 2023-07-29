@@ -10,14 +10,11 @@ from django.core import serializers
 from django.shortcuts import render
 from django.db.models import Q
 from django.views.decorators.http import require_http_methods
-from database.models import NodeInfo
-from database.models import User
-from database.models import Link
+from database.models import NodeInfo, User, Link, Favourite
 from database import cnmooc, cmooc, xuetangx, icourse163, icourses, imooc, bilibili, study163
 
 
 # Create your views here.
-# add_student接受一个get请求，往数据库里添加一条Student数据
 @require_http_methods(["GET"])
 def add_node(request):
     response = {}
@@ -195,7 +192,7 @@ def change_favourite(request):
 def get_favourite(request):
     user = request.GET['username']
     response = {
-        'nodes': json.loads(serializers.serialize("json", NodeInfo.objects.filter(user=user, favourite=1))), }
+        'nodes': json.loads(serializers.serialize("json", NodeInfo.objects.filter(user=user))), }
     return JsonResponse(response)
 
 
@@ -269,6 +266,90 @@ def download_graph(request):
     return response
 
 
+@require_http_methods(['GET'])
+def favourite_graph(request):
+    response = {}
+    try:
+        user = request.GET['username']
+        filename = request.GET['graphname']
+        if not os.path.exists("upload\\" + user):
+            os.makedirs("upload\\" + user)
+
+        graphs = Favourite.objects.filter(username=user, favourite=filename)
+        if graphs:
+            response['add_result'] = '已存在同名收藏'
+            response['add_error'] = 1
+            return JsonResponse(response)
+        file = open("upload\\" + user + '\\' + filename + '.json', 'w')
+        nodes = NodeInfo.objects.filter(user=user)
+        graph = json.dumps({
+            "nodes": json.loads(serializers.serialize("json", nodes)),
+            "links": json.loads(serializers.serialize("json", Link.objects.filter(user=user)))})
+        graph.replace("\'", "\"")
+        file.write(graph)
+        file.close()
+        favourite = Favourite(favourite=filename, username=user, nodecount=nodes.count())
+        favourite.save()
+
+        response['add_error'] = 0
+        response['add_result'] = 'favourite success'
+    except Exception as e:
+        response['add_error'] = 2
+        response['add_result'] = 'Other Error.'
+    return JsonResponse(response)
+
+
+@require_http_methods(['GET'])
+def delete_favourite_graph(request):
+    response = {}
+    try:
+        user = request.GET['username']
+        graph = request.GET['graphname']
+        os.remove("upload\\" + user + '\\' + graph + '.json')
+        Favourite.objects.filter(favourite=graph, username=user).delete()
+        response['msg'] = ''
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = 'Other Error.'
+        response['error_num'] = 2
+    return JsonResponse(response)
+
+
+@require_http_methods(['GET'])
+def get_favourite_list(request):
+    response = {}
+    try:
+        user = request.GET['username']
+        response = {'graphs': json.loads(serializers.serialize("json", Favourite.objects.filter(username=user))),
+                    'error_num': 0}
+    except Exception as e:
+        response['error_num'] = 2
+    return JsonResponse(response)
+
+
+@require_http_methods(['GET'])
+def load_favourite(request):
+    user = request.GET['username']
+    favourite = request.GET['favourite']
+    line = ''
+    with open("upload\\" + user + '\\' + favourite + '.json', 'r') as file:
+        line = file.readline()
+
+    dicts = json.loads(line)
+    Link.objects.filter(user=user).delete()
+    NodeInfo.objects.filter(user=user).delete()
+    for link in dicts['links']:
+        linker = Link(source=link['fields']['source'], target=link['fields']['target'], name=link['fields']['name'],
+                      user=link['fields']['user'])
+        linker.save()
+    for node in dicts['nodes']:
+        noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'],
+                         user=node['fields']['user'], favourite=node['fields']['favourite'])
+        noder.save()
+    message = {'code': 200, 'error_num': 0}
+    return JsonResponse(message)
+
+
 @require_http_methods(['POST'])
 def upload_graph(request):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -294,20 +375,16 @@ def upload_graph(request):
                              user=node['fields']['user'], favourite=node['fields']['favourite'])
             noder.save()
 
-        # 判断是否存在文件夹, 如果没有就创建文件路径
         if not os.path.exists(head_path):
             os.makedirs(head_path)
-        file_suffix = file.name.split(".")[1]  # 获取文件后缀
-        # 储存路径
+        file_suffix = file.name.split(".")[1]
+
         file_path = head_path + "\\{}".format(name + "." + file_suffix)
         file_path = file_path.replace(" ", "")
-        # 上传文件
         with open(file_path, 'wb') as f:
             lines = file.readlines()
             for line in lines:
                 f.write(line)
 
         message = {'code': 200, 'fileurl': file_path}
-        # 返回图片路径
-
         return JsonResponse(message)

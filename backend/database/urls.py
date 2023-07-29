@@ -16,5 +16,9 @@ urlpatterns = [
     url(r'^upload_graph/', views.upload_graph),
     url(r'^change_node/', views.change_nodename),
     url(r'^change_favourite/', views.change_favourite),
-    url(r'^get_favourite/', views.get_favourite)
+    url(r'^get_favourite/', views.get_favourite),
+    url(r'^favourite_graph/', views.favourite_graph),
+    url(r'^get_favourite_list/', views.get_favourite_list),
+    url(r'^delete_favourite_graph/', views.delete_favourite_graph),
+    url(r'^load_favourite/', views.load_favourite),
 ]

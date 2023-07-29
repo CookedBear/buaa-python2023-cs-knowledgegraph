@@ -24,6 +24,7 @@
 import API from "@/plugins/axios.js"
 import Qs from "qs";
 import {Input} from "view-ui-plus";
+import {ElNotification} from "element-plus";
 
 export default {
   components: {Input},
@@ -78,6 +79,11 @@ export default {
             this.error_result = res.data.add_result
             return
           }
+          ElNotification({
+            title: '成功添加节点',
+            message: '成功添加节点 ' + this.formItem.input + ' 至当前画布',
+            type: 'success',
+          })
           this.$emit('rebuild')
           this.hide()
         })

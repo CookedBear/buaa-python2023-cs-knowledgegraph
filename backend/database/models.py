@@ -20,3 +20,10 @@ class Link(models.Model):
     target = models.CharField(max_length=26)
     name = models.CharField(max_length=26)
     user = models.CharField(max_length=20, null=True)
+
+
+class Favourite(models.Model):
+    favourite = models.CharField(max_length=114)
+    username = models.CharField(max_length=514)
+    nodecount = models.IntegerField()
+    time = models.DateTimeField(auto_now=True, null=True)
