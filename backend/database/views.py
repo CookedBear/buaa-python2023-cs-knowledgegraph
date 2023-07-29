@@ -154,6 +154,26 @@ def change_password(request):
     return JsonResponse(response)
 
 
+@require_http_methods(['POST'])
+def change_nodename(request):
+    response = {}
+    try:
+        user = request.POST['username']
+        oldname = request.POST['oldname']
+        print(user, oldname)
+        node = NodeInfo.objects.get(user=user, knowledgeName=oldname)
+        node.knowledgeName = request.POST['newname']
+        node.relation = request.POST['level']
+        node.save()
+        response['error'] = 0
+        response['result'] = "Success"
+    except Exception as e:
+        response['error'] = 2
+        response['result'] = "Other Error."
+
+    return JsonResponse(response)
+
+
 @require_http_methods(['GET'])
 def add_relation(request):
     response = {}

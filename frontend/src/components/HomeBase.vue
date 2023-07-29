@@ -4,6 +4,7 @@ import AddNode from "@/components/Base/AddNode.vue"
 import API from "@/plugins/axios";
 import Qs from "qs";
 import AddSelf from "@/components/Base/AddSelf.vue";
+import ChangeNode from "@/components/Base/ChangeNode.vue";
 import TabCard from "@/components/Base/TabCard.vue";
 
 export default {
@@ -29,6 +30,10 @@ export default {
     },
     addSingle: function () {
       this.addSelfDisplay = true
+      this.$refs.rightMenu.style.display = 'none';
+    },
+    changeName: function () {
+      this.changeNodeDisplay = true
       this.$refs.rightMenu.style.display = 'none';
     },
     setChartsOn: function () {
@@ -294,12 +299,13 @@ export default {
         this.$refs.rightMenu1.style.display = 'none';
         this.rebuildChart()
       })
-    }
+    },
   },
   components: {
     AddSelf,
     AddNode,
     TabCard,
+    ChangeNode,
   },
   data() {
     return {
@@ -308,6 +314,7 @@ export default {
       contextmenu: false,
       addNodeDisplay: false,
       addSelfDisplay: false,
+      changeNodeDisplay: false,
       tabCardDisplay: false,
       selectedNodeName: 'GGG',
       selectedSource: '',
@@ -363,6 +370,7 @@ export default {
       <li @click="addNode">添加关联节点</li>
       <li @click="delNode">删除节点</li>
       <li @click="addSingle">添加孤立节点</li>
+      <li @click="changeName">修改节点信息</li>
     </ul>
   </div>
   <div ref="rightMenu1" class="menu" style="display: none;">
@@ -382,6 +390,12 @@ export default {
            :username=username
            @hideCard="addSelfDisplay=!addSelfDisplay"
            @rebuild="rebuildChart"></AddSelf>
+  <ChangeNode v-show="changeNodeDisplay === true"
+              style="position: absolute; right: 4%; bottom: 18%; z-index: 9"
+              :selected=selectedNodeName
+              :username=username
+              @hideCard="changeNodeDisplay=!changeNodeDisplay"
+              @rebuild="rebuildChart"></ChangeNode>
   <TabCard v-show="tabCardDisplay === true"
            style="position: absolute; right: 4%; top: 8%; z-index: 8;"
            @hideCard="tabCardDisplay=!tabCardDisplay"
