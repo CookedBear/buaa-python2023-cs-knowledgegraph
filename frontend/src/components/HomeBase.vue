@@ -214,6 +214,7 @@ export default {
         console.log(params)
         if (params.dataType === 'node') {
           that.selectedNodeName = params.data.name
+          that.selectedFavourite = params.data.favourite
           console.log(that.selectedNodeName)
           that.contextmenu = true
           // 去掉悬停
@@ -255,7 +256,8 @@ export default {
         for (var i in res.data.nodes) {
           nodes.push({
             name: res.data.nodes[i].fields.knowledgeName,
-            level: res.data.nodes[i].fields.relation
+            level: res.data.nodes[i].fields.relation,
+            favourite: res.data.nodes[i].fields.favourite,
           })
         }
         var links = []
@@ -277,6 +279,21 @@ export default {
       data['username'] = this.username
       API({
         url: '/del_node/',
+        method: 'post',
+        data: (Qs.stringify(data))
+      }).then((res) => {
+        console.log(res)
+        this.$refs.rightMenu.style.display = 'none';
+        this.rebuildChart()
+      })
+    },
+    changeFavourite: function () {
+      var data = {}
+      data['nodename'] = this.selectedNodeName
+      data['username'] = this.username
+      data['favourite'] = 1 - this.selectedFavourite
+      API({
+        url: '/change_favourite/',
         method: 'post',
         data: (Qs.stringify(data))
       }).then((res) => {
@@ -317,6 +334,7 @@ export default {
       changeNodeDisplay: false,
       tabCardDisplay: false,
       selectedNodeName: 'GGG',
+      selectedFavourite: 0,
       selectedSource: '',
       selectedTarget: '',
       contextmenu1: false,
@@ -342,10 +360,9 @@ export default {
         if (this.tabCardDisplay === false) {
           return
         }
-
       }
-    }
-  }
+    },
+  },
   // watch: {
   //   graphLinks: {
   //     deep: true,
@@ -371,6 +388,8 @@ export default {
       <li @click="delNode">删除节点</li>
       <li @click="addSingle">添加孤立节点</li>
       <li @click="changeName">修改节点信息</li>
+      <li @click="changeFavourite" v-if="selectedFavourite">取消收藏</li>
+      <li @click="changeFavourite" v-else>添加为收藏</li>
     </ul>
   </div>
   <div ref="rightMenu1" class="menu" style="display: none;">

@@ -58,6 +58,7 @@ export default {
       }).then((res) => {
         console.log(res)
         if (res.data.error_num !== 0) {
+          this.error_result = res.data.msg
           return
         }
         this.$emit('rebuild')

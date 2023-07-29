@@ -29,7 +29,7 @@ def add_node(request):
             response['error_num'] = 1
             return JsonResponse(response)
         node = NodeInfo(knowledgeName=request.GET.get('knowledgeName'), relation=request.GET.get('relation'),
-                        user=request.GET.get('username'))
+                        user=request.GET.get('username'), favourite=0)
         node.save()
         response['msg'] = 'add node success'
         response['error_num'] = 0
@@ -125,7 +125,7 @@ def register(request):
             return JsonResponse(response)
         user = User(username=name, password=key)
         user.save()
-        baseNode = NodeInfo(knowledgeName="计算机科学与技术", relation=0, user=name)
+        baseNode = NodeInfo(knowledgeName="计算机科学与技术", relation=0, user=name, favourite=1)
         baseNode.save()
         response['register_error'] = 0
         response['register_result'] = 'register success'
@@ -160,7 +160,6 @@ def change_nodename(request):
     try:
         user = request.POST['username']
         oldname = request.POST['oldname']
-        print(user, oldname)
         node = NodeInfo.objects.get(user=user, knowledgeName=oldname)
         node.knowledgeName = request.POST['newname']
         node.relation = request.POST['level']
@@ -171,6 +170,32 @@ def change_nodename(request):
         response['error'] = 2
         response['result'] = "Other Error."
 
+    return JsonResponse(response)
+
+
+@require_http_methods(['POST'])
+def change_favourite(request):
+    response = {}
+    try:
+        user = request.POST['username']
+        name = request.POST['nodename']
+        node = NodeInfo.objects.get(user=user, knowledgeName=name)
+        node.favourite = request.POST['favourite']
+        node.save()
+        response['error'] = 0
+        response['result'] = "Success"
+    except Exception as e:
+        response['error'] = 2
+        response['result'] = "Other Error."
+
+    return JsonResponse(response)
+
+
+@require_http_methods(['GET'])
+def get_favourite(request):
+    user = request.GET['username']
+    response = {
+        'nodes': json.loads(serializers.serialize("json", NodeInfo.objects.filter(user=user, favourite=1))), }
     return JsonResponse(response)
 
 
@@ -266,7 +291,7 @@ def upload_graph(request):
             linker.save()
         for node in dicts['nodes']:
             noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'],
-                             user=node['fields']['user'])
+                             user=node['fields']['user'], favourite=node['fields']['favourite'])
             noder.save()
 
         # 判断是否存在文件夹, 如果没有就创建文件路径

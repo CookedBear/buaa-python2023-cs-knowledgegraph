@@ -1,16 +1,17 @@
 <template>
   <Menu :active-name="activeName" theme="light" width="auto" :open-names=activeNameAt style="z-index: 2">
-      <MenuItem name="home" @click="toHome">
-        <Icon type="ios-analytics"></Icon>
-        主页
-      </MenuItem>
+    <MenuItem name="home" @click="toHome">
+      <Icon type="ios-analytics"></Icon>
+      主页
+    </MenuItem>
     <Submenu name="">
       <template #title>
         <Icon type="ios-analytics"></Icon>
-      个人中心
+        个人中心
       </template>
       <MenuItem name="change" @click="toChange">修改密码</MenuItem>
       <MenuItem name="load" @click="toLoad">导入/导出</MenuItem>
+      <MenuItem name="favourite" @click="toFavourite">我的收藏</MenuItem>
     </Submenu>
     <MenuItem name="about" @click="toAbout">
       <Icon type="ios-navigate"></Icon>
@@ -28,10 +29,10 @@ export default {
   computed: {
     activeNameAt: {
       immediate: true,
-      get: function() {
-        if (this.activeName === 'load' || this.activeName === 'change') {
+      get: function () {
+        if (this.activeName === 'load' || this.activeName === 'change' || this.activeName === 'favourite') {
           return [""];
-        } else if (this.activeName === 'home' || this.activeName === 'about'){
+        } else if (this.activeName === 'home' || this.activeName === 'about') {
           return this.activeName;
         }
       }
@@ -52,6 +53,9 @@ export default {
     },
     toAbout() {
       this.$router.push({name: 'about', query: {username: this.username}})
+    },
+    toFavourite() {
+      this.$router.push({name: 'favourite', query: {username: this.username}})
     }
   }
 }

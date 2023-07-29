@@ -14,5 +14,7 @@ urlpatterns = [
     url(r'^get_creep_content/', views.get_creep_content),
     url(r'^download_graph/', views.download_graph),
     url(r'^upload_graph/', views.upload_graph),
-    url(r'^change_node', views.change_nodename),
+    url(r'^change_node/', views.change_nodename),
+    url(r'^change_favourite/', views.change_favourite),
+    url(r'^get_favourite/', views.get_favourite)
 ]

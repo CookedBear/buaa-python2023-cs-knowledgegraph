@@ -1,5 +1,8 @@
 <script>
+import {MenuItem} from "view-ui-plus";
+
 export default {
+  components: {MenuItem},
   data() {
     return {}
   },
@@ -19,6 +22,9 @@ export default {
     },
     toAbout() {
       this.$router.push({name: 'about', query: {username: this.username}})
+    },
+    toFavourite() {
+      this.$router.push({name: 'favourite', query: {username: this.username}})
     }
   }
 }
@@ -34,13 +40,14 @@ export default {
         主页
       </MenuItem>
       <Submenu name="2">
-      <template #title>
-        <Icon type="ios-analytics"></Icon>
-      个人中心
-      </template>
-      <MenuItem name="change" @click="toChange">修改密码</MenuItem>
-      <MenuItem name="load" @click="toLoad">导入/导出</MenuItem>
-    </Submenu>
+        <template #title>
+          <Icon type="ios-analytics"></Icon>
+          个人中心
+        </template>
+        <MenuItem name="change" @click="toChange">修改密码</MenuItem>
+        <MenuItem name="load" @click="toLoad">导入/导出</MenuItem>
+        <MenuItem name="favourite" @click="toFavourite">我的收藏</MenuItem>
+      </Submenu>
       <MenuItem name="about" @click="toAbout">
         <Icon type="ios-navigate"></Icon>
         关于

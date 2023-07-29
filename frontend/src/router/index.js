@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
 import Change from '@/views/Change.vue'
 import Load from '@/views/Load.vue'
+import Favourite from "@/views/Favourite.vue";
 import Login from "@/views/Login.vue"
 
 const routes = [
@@ -25,6 +26,11 @@ const routes = [
         path: '/self/load',
         name: 'load',
         component: Load,
+    },
+    {
+        path: '/self/favourite',
+        name: 'favourite',
+        component: Favourite,
     },
     {
         path: '/login',

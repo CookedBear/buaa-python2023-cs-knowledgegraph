@@ -4,10 +4,10 @@
     <br>
     <Form :model="formItem" :label-width="80">
       <FormItem label="Input">
-        <AutoComplete
+        <Input
             v-model="formItem.input"
             placeholder="Enter Node name."
-            :data="nodenames"></AutoComplete>
+            :data="nodenames"></Input>
       </FormItem>
       <FormItem label="Level">
         <Input v-model="formItem.relation" type="number"
@@ -24,8 +24,10 @@
 <script>
 import API from "@/plugins/axios.js"
 import Qs from "qs";
+import {Input} from "view-ui-plus";
 
 export default {
+  components: {Input},
   emit: ['hideCard', 'rebuild'],
   data() {
     return {
