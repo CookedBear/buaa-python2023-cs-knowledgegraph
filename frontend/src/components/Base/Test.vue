@@ -222,7 +222,7 @@ export default {
 </script>
 
 <template>
-  <div id="main" ref="main" style="height: 650px; width: 1300px" @contextmenu.prevent="" @click="mainClick"></div>
+  <div id="main" ref="main" style="height: 580px; width: 1300px" @contextmenu.prevent="" @click="mainClick"></div>
   <div ref="rightMenu" class="menu" style="display: none;">
     <ul>
       <li @click="addNode">添加关联节点</li>

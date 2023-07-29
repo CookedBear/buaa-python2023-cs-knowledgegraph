@@ -83,19 +83,18 @@ export default {
   <Card style="width:60%; height: 80%" class="center margin">
     <div style="display: flex">
       <Tabs v-model="switcher" class="card">
-        <TabPane label="login" name="login">
+        <TabPane label="登录" name="login">
           <Login @on-submit="handleSubmit">
             <UserName name="username"/>
             <Password name="password"/>
             <div class="demo-auto-login">
-              <Checkbox v-model="autoLogin" size="large">自动登录</Checkbox>
               <a @click="jumpToLost">找回密码</a>
             </div>
             <Submit style="margin-top: 15px"/>
             <p style="margin-top: 8px; color: red; text-align: left">{{ login_result }}</p>
           </Login>
         </TabPane>
-        <TabPane label="register" name="register">
+        <TabPane label="注册" name="register">
           <Login @on-submit="handleRegister">
             <UserName name="username"/>
             <Password name="password"

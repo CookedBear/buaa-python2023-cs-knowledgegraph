@@ -6,7 +6,7 @@
           style="background: #fff; z-index: 11"
           :username=username>
       </Header>
-      <Layout :style="{height: '780px'}">
+      <Layout :style="{height: '600px'}">
         <Sider
             hide-trigger
             style="background: #fff; z-index: 10">

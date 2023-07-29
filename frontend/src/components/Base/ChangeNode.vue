@@ -3,19 +3,18 @@
   <Card style="height: 250px; width: 300px; background: rgb(239,255,246); ">
     <br>
     <Form :model="formItem" :label-width="80">
-      <FormItem label="Input">
-        <AutoComplete
+      <FormItem label="节点名">
+        <Input
             v-model="formItem.input"
-            placeholder="Enter Node name."
-            :data="nodenames"></AutoComplete>
+            placeholder="请输入新名称"
+            :data="nodenames"></Input>
       </FormItem>
-      <FormItem label="Level">
-        <Input v-model="formItem.relation" type="number"
-               placeholder="Enter level of the node."></Input>
+      <FormItem label="等级">
+        <el-input-number v-model="formItem.relation" :min="0" :max="10"/>
       </FormItem>
       <FormItem>
-        <Button type="primary" @click="submitNode">Submit</Button>
-        <Button style="margin-left: 8px" @click="hide">Cancel</Button>
+        <Button type="primary" @click="submitNode">修改</Button>
+        <Button style="margin-left: 8px" @click="hide">取消</Button>
         <p style="color: red">{{ error_result }}</p>
       </FormItem>
     </Form>
