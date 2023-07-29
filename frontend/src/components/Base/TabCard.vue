@@ -8,9 +8,11 @@ import Icourse163 from "@/components/Base/Icourse163.vue";
 import Icourses from "@/components/Base/Icourses.vue";
 import Study163 from "@/components/Base/Study163.vue";
 import Cnmooc from "@/components/Base/Cnmooc.vue";
+import Cmooc from "@/components/Base/Cmooc.vue";
+import Xuetangx from "@/components/Base/Xuetangx.vue";
 
 export default {
-  components: {Icourse163, Icourses, Imooc, Bili, Study163, Cnmooc},
+  components: {Xuetangx, Cmooc, Icourse163, Icourses, Imooc, Bili, Study163, Cnmooc},
   emit: ['hideCard'],
   data() {
     return {
@@ -30,7 +32,7 @@ export default {
       displayData: {}
     }
   },
-  props: ['knowledge', 'bilibili', 'imooc', 'icourse163', 'icourses', 'study163', 'cnmooc'],
+  props: ['knowledge', 'bilibili', 'imooc', 'icourse163', 'icourses', 'study163', 'cnmooc', 'cmooc', 'xuetangx'],
   methods: {
     close: function () {
       ElNotification({
@@ -68,27 +70,35 @@ export default {
     >
       <el-tab-pane name="bilibili" label="Bilibili">
         <Bili
-        :data="this.bilibili"></Bili>
+            :data="this.bilibili"></Bili>
+      </el-tab-pane>
+      <el-tab-pane name="cmooc" label="cmooc">
+        <Cmooc
+            :data="this.cmooc"></Cmooc>
       </el-tab-pane>
       <el-tab-pane name="cnmooc" label="cnmooc">
         <Cnmooc
-        :data="this.cnmooc"></Cnmooc>
+            :data="this.cnmooc"></Cnmooc>
       </el-tab-pane>
       <el-tab-pane name="iMooc" label="iMooc">
         <Imooc
-        :data="this.imooc"></Imooc>
+            :data="this.imooc"></Imooc>
       </el-tab-pane>
       <el-tab-pane name="iCourse163" label="iCourse163">
         <Icourse163
-        :data="this.icourse163"></Icourse163>
+            :data="this.icourse163"></Icourse163>
       </el-tab-pane>
       <el-tab-pane name="iCourses" label="iCourses">
         <Icourses
-        :data="this.icourses"></Icourses>
+            :data="this.icourses"></Icourses>
       </el-tab-pane>
       <el-tab-pane name="study163" label="study163">
-        <study163
-        :data="this.study163"></study163>
+        <Study163
+            :data="this.study163"></Study163>
+      </el-tab-pane>
+      <el-tab-pane name="xuetangx" label="xuetangx">
+        <Xuetangx
+            :data="this.xuetangx"></Xuetangx>
       </el-tab-pane>
     </el-tabs>
   </el-card>

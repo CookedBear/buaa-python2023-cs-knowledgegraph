@@ -13,12 +13,7 @@ from django.views.decorators.http import require_http_methods
 from database.models import NodeInfo
 from database.models import User
 from database.models import Link
-from database import cnmooc
-from database import icourse163
-from database import icourses
-from database import imooc
-from database import bilibili
-from database import study163
+from database import cnmooc, cmooc, xuetangx, icourse163, icourses, imooc, bilibili, study163
 
 
 # Create your views here.
@@ -202,7 +197,9 @@ def get_creep_content(request):
         'icourses': icourses.icourses_search(keyword),
         'imooc': imooc.imooc_search(keyword),
         'study163': study163.study163_search(keyword),
-        'cnmooc': cnmooc.cnmooc_search(keyword)
+        'cnmooc': cnmooc.cnmooc_search(keyword),
+        'cmooc': cmooc.cmooc_search(keyword),
+        'xuetangx': xuetangx.xuetangx_search(keyword),
     }
     return JsonResponse(response)
 

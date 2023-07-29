@@ -2,7 +2,7 @@
   <el-row style="display: flex; width: 100%; margin-bottom: 9px">
     <el-button type="primary" @click="this.datas = JSON.parse(JSON.stringify(this.data)).default">默认排序</el-button>
     <el-button type="primary" @click="this.datas = JSON.parse(JSON.stringify(this.data)).name">名称</el-button>
-    <el-button type="primary" @click="this.datas = JSON.parse(JSON.stringify(this.data)).school">学习人数</el-button>
+    <el-button type="primary" @click="this.datas = JSON.parse(JSON.stringify(this.data)).plays">学习人数</el-button>
   </el-row>
   <div class="infinite-list-wrapper" style="overflow: auto">
     <el-scrollbar height="85%">
@@ -78,6 +78,11 @@ export default {
       } else {
         return '非常好，但是已经到底了'
       }
+    }
+  },
+  watch: {
+    data: function () {
+      this.datas = JSON.parse(JSON.stringify(this.data)).default;
     }
   },
   methods: {

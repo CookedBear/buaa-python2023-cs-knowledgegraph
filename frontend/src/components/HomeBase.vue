@@ -178,6 +178,9 @@ export default {
             that.imooc = that.creepdata[nodeName]['imooc'] = res.data.imooc
             that.study163 = that.creepdata[nodeName]['study163'] = res.data.study163
             that.cnmooc = that.creepdata[nodeName]['cnmooc'] = res.data.cnmooc
+            that.cmooc = that.creepdata[nodeName]['cmooc'] = res.data.cmooc
+            that.xuetangx = that.creepdata[nodeName]['xuetangx'] = res.data.xuetangx
+
             setTimeout(() => {
               that.$Loading.finish();
               that.loading = false
@@ -191,6 +194,9 @@ export default {
           that.imooc = that.creepdata[nodeName]['imooc']
           that.study163 = that.creepdata[nodeName]['study163']
           that.cnmooc = that.creepdata[nodeName]['cnmooc']
+          that.cmooc = that.creepdata[nodeName]['cmooc']
+          that.xuetangx = that.creepdata[nodeName]['xuetangx']
+
           setTimeout(() => {
             that.$Loading.finish();
             that.loading = false
@@ -314,6 +320,8 @@ export default {
       imooc: [],
       study163: [],
       cnmooc: [],
+      cmooc: [],
+      xuetangx: [],
       loading: false,
     }
   },
@@ -384,6 +392,8 @@ export default {
            :icourses=icourses
            :study163=study163
            :cnmooc=cnmooc
+           :cmooc=cmooc
+           :xuetangx=xuetangx
            v-loading="this.loading"></TabCard>
 </template>
 

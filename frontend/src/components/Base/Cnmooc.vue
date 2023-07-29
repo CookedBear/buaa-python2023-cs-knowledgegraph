@@ -78,6 +78,11 @@ export default {
       }
     }
   },
+  watch: {
+    data: function () {
+      this.datas = JSON.parse(JSON.stringify(this.data)).default;
+    }
+  },
   methods: {
     load: function () {
       this.loading = true
