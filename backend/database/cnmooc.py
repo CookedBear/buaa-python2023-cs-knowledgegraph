@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+from pypinyin import pinyin, Style
 from database import exception
 
 
@@ -12,7 +12,7 @@ def cnmooc_search(keyword):
         'Cookie': 'moocvk=318dbc142ac246c88a58212b12becd3f; cpstk=7797e129832146c1adb5051e82c4b7e2; Hm_lvt_ed399044071fc36c6b711fa9d81c2d1c=1689788346; PPA_CI=2ad519ece39b6ca505fdd890e636879c; JSESSIONID=6B5EE0D9B474961DE6A5E47413E9402A.tomcat-1; BEC=8a00e34a4073e76c4f8529c13c4cc82e; Hm_lpvt_ed399044071fc36c6b711fa9d81c2d1c=1690006275'
     }
     url = 'https://www.cnmooc.org/portal/ajaxCourseIndex.mooc'
-    cnmooc = []
+    cnmooc_default = []
     data = {
         'keyWord': {keyword},
         'openFlag': '0',
@@ -37,7 +37,7 @@ def cnmooc_search(keyword):
             schoolName = data.find(class_='t-school').text
             imgUrl = data.find(class_='view-img').find('img')['src']
             courseUrl = 'https://www.cnmooc.org/' + data.find(class_='view-img')['href']
-            cnmooc.append({
+            cnmooc_default.append({
                 'name': courseName,
                 'author': teacherName,
                 'school': schoolName,
@@ -47,4 +47,18 @@ def cnmooc_search(keyword):
             })
     except Exception as e:
         exception.do_exception("cnmooc", keyword)
+    cnmooc = {
+        'default': cnmooc_default,
+        'name': sorted(cnmooc_default, key=lambda x: [pinyin(i, style=Style.TONE3) for i in x['name']]),
+        'school': sorted(cnmooc_default, key=lambda x: [pinyin(i, style=Style.TONE3) for i in x['school']]),
+    }
     return cnmooc
+
+
+if __name__ == '__main__':
+    dic = cnmooc_search('计算机')
+    # Sort the results based on 'play' count in descending order
+    for key in dic.keys():
+        print(key + ':')
+        for data in dic[key]:
+            print(data)

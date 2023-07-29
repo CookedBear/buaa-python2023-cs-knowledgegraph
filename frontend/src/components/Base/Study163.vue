@@ -1,8 +1,8 @@
 <template>
   <el-row style="display: flex; width: 100%; margin-bottom: 9px">
-    <el-button type="primary">播放量</el-button>
-    <el-button type="primary">排序2</el-button>
-    <el-button type="primary">排序3</el-button>
+    <el-button type="primary" @click="this.datas = JSON.parse(JSON.stringify(this.data)).default">默认排序</el-button>
+    <el-button type="primary" @click="this.datas = JSON.parse(JSON.stringify(this.data)).name">名称</el-button>
+    <el-button type="primary" @click="this.datas = JSON.parse(JSON.stringify(this.data)).school">学习人数</el-button>
   </el-row>
   <div class="infinite-list-wrapper" style="overflow: auto">
     <el-scrollbar height="85%">
@@ -13,7 +13,7 @@
           infinite-scroll-distance="35"
       >
         <el-card
-            v-for="i in data" :key="i"
+            v-for="i in datas" :key="i"
             class="list-item"
             @click="openLink(i.url)">
           <div class="block" style="display: flex">
@@ -63,6 +63,7 @@ export default {
     return {
       count: 10,
       loading: false,
+      datas: [],
     }
   },
   computed: {
@@ -70,7 +71,7 @@ export default {
       return this.loading
     },
     bottomMessage: function () {
-      if (this.data === undefined || this.data == null || this.data.length <= 0) {
+      if (this.datas === undefined || this.datas == null || this.datas.length <= 0) {
         return 'Loading...L不出来'
       } else {
         return '非常好，但是已经到底了'
