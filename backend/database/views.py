@@ -12,6 +12,17 @@ from django.db.models import Q
 from django.views.decorators.http import require_http_methods
 from database.models import NodeInfo, User, Link, Favourite
 from database import cnmooc, cmooc, xuetangx, icourse163, icourses, imooc, bilibili, study163
+from datetime import date, datetime
+
+
+class ComplexEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        elif isinstance(obj, date):
+            return obj.strftime('%Y-%m-%d')
+        else:
+            return json.JSONEncoder.default(self, obj)
 
 
 # Create your views here.
@@ -251,7 +262,8 @@ def download_graph(request):
     user = request.GET['username']
     file = open("upload\\" + user + '.json', 'w')
     graph = json.dumps({
-        "nodes": json.loads(serializers.serialize("json", NodeInfo.objects.filter(user=user))),
+        "nodes": json.dumps(list(NodeInfo.objects.filter(user=user).values("knowledgeName", "relation",
+                                                                           "favourite", "time")), cls=ComplexEncoder),
         "links": json.loads(serializers.serialize("json", Link.objects.filter(user=user)))})
     graph.replace("\'", "\"")
     print(graph)
@@ -344,7 +356,8 @@ def load_favourite(request):
         linker.save()
     for node in dicts['nodes']:
         noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'],
-                         user=node['fields']['user'], favourite=node['fields']['favourite'])
+                         user=node['fields']['user'], favourite=node['fields']['favourite'],
+                         time=node['fields']['time'])
         noder.save()
     message = {'code': 200, 'error_num': 0}
     return JsonResponse(message)
@@ -368,11 +381,12 @@ def upload_graph(request):
         for link in dicts['links']:
             print(link)
             linker = Link(source=link['fields']['source'], target=link['fields']['target'], name=link['fields']['name'],
-                          user=link['fields']['user'])
+                          user=name)
             linker.save()
         for node in dicts['nodes']:
+            timer = datetime.strptime(node['fields']['time'], '%Y-%m-%dT%H:%M:%S.%f')
             noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'],
-                             user=node['fields']['user'], favourite=node['fields']['favourite'])
+                             user=name, favourite=node['fields']['favourite'], time=timer)
             noder.save()
 
         if not os.path.exists(head_path):
