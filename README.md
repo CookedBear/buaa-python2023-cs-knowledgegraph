@@ -38,12 +38,6 @@
 - 名称`name`
 - 学习人数`plays`
 
-### study163
-
-- 默认排序`default`
-- 名称`name`
-- 学习人数`plays`
-
 ### cnmooc
 
 - 默认排序`default`
@@ -63,3 +57,10 @@
 - 默认排序`default`
 - 名称`name`
 - 热度`plays`
+  
+### study163
+
+- 默认排序`default`
+- 名称`name`
+- 学习人数`plays`
+  
