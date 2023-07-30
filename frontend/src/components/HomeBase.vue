@@ -3,7 +3,6 @@ import * as echarts from "echarts";
 import AddNode from "@/components/Base/AddNode.vue"
 import API from "@/plugins/axios";
 import Qs from "qs";
-import AddSelf from "@/components/Base/AddSelf.vue";
 import ChangeNode from "@/components/Base/ChangeNode.vue";
 import TabCard from "@/components/Base/TabCard.vue";
 import {Button} from "view-ui-plus";
@@ -274,37 +273,6 @@ export default {
         this.setChartsOn()
       })
     },
-    storeFavourite: function () {
-      this.dialogDisplay = true
-      this.$refs.rightMenu.style.display = 'none';
-    },
-    addFavourite: function () {
-      var params = new URLSearchParams();
-      params.append('username', this.username)
-      params.append('graphname', this.graphname)
-      API({
-        url: '/favourite_graph/',
-        method: 'get',
-        params: params
-      }).then((res) => {
-        console.log(res)
-        // TODO: 出错时弹窗通知
-        if (res.data.add_error === 0) {
-          this.dialogDisplay = false
-          ElNotification({
-            title: '收藏添加成功',
-            message: '成功添加名为 ' + this.graphname + ' 的收藏',
-            type: 'success',
-          })
-        } else {
-          ElNotification({
-            title: '哈哈，太着急了吧',
-            message: res.data.add_result,
-            type: 'error',
-          })
-        }
-      })
-    },
     delNode: function () {
       var data = {}
       data['del_node'] = this.selectedNodeName
@@ -364,7 +332,6 @@ export default {
   },
   components: {
     Button,
-    AddSelf,
     AddNode,
     TabCard,
     ChangeNode,
@@ -375,7 +342,6 @@ export default {
       graphNodes: [],
       contextmenu: false,
       addNodeDisplay: false,
-      addSelfDisplay: false,
       changeNodeDisplay: false,
       tabCardDisplay: false,
       selectedNodeName: 'GGG',
@@ -433,11 +399,11 @@ export default {
     <ul>
       <li @click="addNode">添加关联节点</li>
       <li @click="delNode">删除节点</li>
-      <li @click="addSingle">添加孤立节点</li>
+      <!--      <li @click="addSingle">添加孤立节点</li>-->
       <!--      <li @click="changeName">修改节点信息</li>-->
       <li @click="changeFavourite" v-if="selectedFavourite">取消收藏</li>
-      <li @click="changeFavourite" v-else>添加为收藏</li>
-      <li @click="storeFavourite">保存当前图为收藏</li>
+      <li @click="changeFavourite" v-else>添加至收藏节点</li>
+      <!--      <li @click="storeFavourite">保存当前图为收藏</li>-->
     </ul>
   </div>
   <div ref="rightMenu1" class="menu" style="display: none;">
@@ -463,21 +429,6 @@ export default {
               :username=username
               @hideCard="changeNodeDisplay=!changeNodeDisplay"
               @rebuild="rebuildChart"></ChangeNode>
-  <el-dialog v-model="dialogDisplay" title="保存为收藏">
-    <el-form style="width: 50%; text-align: center; margin: auto auto auto 5%">
-      <el-form-item label="收藏名">
-        <el-input v-model="graphname" autocomplete="off"/>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <Button @click="dialogDisplay = false" style="margin-right: 10px">取消</Button>
-        <Button type="primary" @click="addFavourite">
-          确认修改
-        </Button>
-      </span>
-    </template>
-  </el-dialog>
   <TabCard v-show="tabCardDisplay === true"
            style="position: absolute; right: 4%; top: 8%; z-index: 8;"
            @hideCard="tabCardDisplay=!tabCardDisplay"
