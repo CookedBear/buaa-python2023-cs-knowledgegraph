@@ -168,10 +168,17 @@ def change_nodename(request):
     try:
         user = request.POST['username']
         oldname = request.POST['oldname']
+        newname = request.POST['newname']
         node = NodeInfo.objects.get(user=user, knowledgeName=oldname)
-        node.knowledgeName = request.POST['newname']
+        node.knowledgeName = newname
         node.relation = request.POST['level']
         node.save()
+        for link in Link.objects.filter(source=oldname, user=user):
+            link.source = newname
+            link.save()
+        for link in Link.objects.filter(target=oldname, user=user):
+            link.target = newname
+            link.save()
         response['error'] = 0
         response['result'] = "Success"
     except Exception as e:
