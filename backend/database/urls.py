@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^get_favourite_list/', views.get_favourite_list),
     url(r'^delete_favourite_graph/', views.delete_favourite_graph),
     url(r'^load_favourite/', views.load_favourite),
+    url(r'^init_graph/', views.init_graph),
 ]

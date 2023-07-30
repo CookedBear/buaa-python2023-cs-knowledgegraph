@@ -388,3 +388,20 @@ def upload_graph(request):
 
         message = {'code': 200, 'fileurl': file_path}
         return JsonResponse(message)
+
+
+@require_http_methods(['GET'])
+def init_graph(request):
+    response = {}
+    try:
+        username = request.GET['username']
+        Link.objects.filter(user=username).delete()
+        NodeInfo.objects.filter(user=username).delete()
+        initNode = NodeInfo(knowledgeName="计算机科学与技术", relation=0, user=username, favourite=1)
+        initNode.save()
+        response['code'] = 0
+        response['msg'] = 'Success'
+    except Exception as e:
+        response['code'] = 2
+        response['msg'] = 'Other Error.'
+    return JsonResponse(response)

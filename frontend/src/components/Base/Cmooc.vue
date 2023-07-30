@@ -19,7 +19,7 @@
           <!--          <el-image class="pic" lazy :src="i.img" fit="contain"></el-image>-->
           <!--          {{ i.name }} {{ i.url }}-->
           <div class="block" style="display: flex">
-            <img :src="i.img" alt=""/>
+            <img :src="'https://images.weserv.nl/?url=' + i.img" alt=""/>
             <p style="margin-top: -8px">{{ i.name }}</p>
           </div>
           <div style="display: flex; left: 51%; bottom: 47%; position: relative">
