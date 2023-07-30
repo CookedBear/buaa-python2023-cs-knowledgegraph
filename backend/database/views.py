@@ -55,8 +55,8 @@ def del_node(request):
         node = request.POST['del_node']
         user = request.POST['username']
         NodeInfo.objects.filter(knowledgeName=node, user=user).delete()
-        Link.objects.filter(source=node).delete()
-        Link.objects.filter(target=node).delete()
+        Link.objects.filter(source=node, user=user).delete()
+        Link.objects.filter(target=node, user=user).delete()
         response['msg'] = ''
         response['error_num'] = 0
     except Exception as e:
