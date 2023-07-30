@@ -379,14 +379,16 @@ def upload_graph(request):
         NodeInfo.objects.filter(user=name).delete()
         # add new data
         for link in dicts['links']:
-            print(link)
             linker = Link(source=link['fields']['source'], target=link['fields']['target'], name=link['fields']['name'],
                           user=name)
             linker.save()
-        for node in dicts['nodes']:
-            timer = datetime.strptime(node['fields']['time'], '%Y-%m-%dT%H:%M:%S.%f')
-            noder = NodeInfo(knowledgeName=node['fields']['knowledgeName'], relation=node['fields']['relation'],
-                             user=name, favourite=node['fields']['favourite'], time=timer)
+        print(dicts['nodes'])
+        nodes = json.loads(dicts['nodes'])
+        for node in nodes:
+            print(node)
+            timer = datetime.strptime(node['time'], '%Y-%m-%dT%H:%M:%S.%f')
+            noder = NodeInfo(knowledgeName=node['knowledgeName'], relation=node['relation'],
+                             user=name, favourite=node['favourite'], time=timer)
             noder.save()
 
         if not os.path.exists(head_path):
