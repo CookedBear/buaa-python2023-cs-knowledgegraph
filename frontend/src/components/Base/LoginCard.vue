@@ -106,7 +106,7 @@ export default {
           </Login>
         </TabPane>
       </Tabs>
-      <img src="../../assets/fenhai.jpg" style="width: 65%; height: 60%">
+      <img src="../../assets/k-on.jpg" style="width: 65%; height: 60%">
     </div>
   </Card>
 </template>

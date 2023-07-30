@@ -50,7 +50,7 @@ export default {
     submitNode: function () {
       console.log(this.formItem)
       console.log({'node1': this.selected, 'node2': this.formItem.input})
-      if (this.formItem.input === '') {
+      if (this.formItem.input === '' || this.formItem.relation === null) {
         return
       }
 

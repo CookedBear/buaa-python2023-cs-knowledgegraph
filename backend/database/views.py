@@ -122,7 +122,7 @@ def register(request):
             return JsonResponse(response)
         user = User(username=name, password=key)
         user.save()
-        baseNode = NodeInfo(knowledgeName="计算机科学与技术", relation=0, user=name, favourite=1)
+        baseNode = NodeInfo(knowledgeName="计算机", relation=0, user=name, favourite=1)
         baseNode.save()
         response['register_error'] = 0
         response['register_result'] = 'register success'
@@ -397,7 +397,7 @@ def init_graph(request):
         username = request.GET['username']
         Link.objects.filter(user=username).delete()
         NodeInfo.objects.filter(user=username).delete()
-        initNode = NodeInfo(knowledgeName="计算机科学与技术", relation=0, user=username, favourite=1)
+        initNode = NodeInfo(knowledgeName="计算机", relation=0, user=username, favourite=1)
         initNode.save()
         response['code'] = 0
         response['msg'] = 'Success'
