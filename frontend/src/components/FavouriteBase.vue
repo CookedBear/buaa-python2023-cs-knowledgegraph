@@ -9,7 +9,8 @@
         style="width: 90%; margin: 20px auto auto;"
     >
       <el-table-column prop="name" label="节点名" sortable/>
-      <el-table-column prop="level" label="节点等级" width="250" sortable/>
+      <el-table-column prop="level" label="节点等级" width="200" sortable/>
+      <el-table-column prop="time" label="最后修改时间" sortable/>
       <el-table-column prop="favourite" label="是否为收藏节点" width="200" sortable>
         <template #default="scope">
           <el-tag
