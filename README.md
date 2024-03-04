@@ -1,6 +1,12 @@
 # BUAA-Python-2023-knowledgegraph
 
-本仓库为北京航空航天大学 2023 年夏季学期 Python 程序设计（全英文）课程的期末团队大作业。
+本仓库为北京航空航天大学 2023 年夏季学期 Python 程序设计（全英文）课程的期末团队大作业。项目的演示视频点击下方图片可见：
+
+
+
+[![IMAGE ALT TEXT](https://cookedbear-2003-1307884465.cos.ap-beijing.myqcloud.com/NotePics/202403041826980.jpg)](https://cookedbear-2003-1307884465.cos.ap-beijing.myqcloud.com/NotePics/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-2023Python%E5%A4%A7%E4%BD%9C%E4%B8%9A-A%E9%A2%98-05%E7%BB%84.mp4)
+
+
 
 ## 项目概览
 
