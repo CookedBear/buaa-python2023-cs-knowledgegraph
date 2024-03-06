@@ -4,7 +4,7 @@
 
 
 
-[![IMAGE ALT TEXT](https://cookedbear-2003-1307884465.cos.ap-beijing.myqcloud.com/NotePics/202403041826980.jpg)](https://cookedbear-2003-1307884465.cos.ap-beijing.myqcloud.com/NotePics/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-2023Python%E5%A4%A7%E4%BD%9C%E4%B8%9A-A%E9%A2%98-05%E7%BB%84.mp4)
+[![IMAGE ALT TEXT]([https://cookedbear-2003-1307884465.cos.ap-beijing.myqcloud.com/NotePics/202403041826980.jpg](https://github.com/CookedBear/buaa-python2023-cs-knowledgegraph/assets/121625084/50a878c8-a016-4c95-bded-bb1a8e329eac))](https://cookedbear-2003-1307884465.cos.ap-beijing.myqcloud.com/NotePics/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-2023Python%E5%A4%A7%E4%BD%9C%E4%B8%9A-A%E9%A2%98-05%E7%BB%84.mp4)
 
 
 
